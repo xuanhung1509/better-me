@@ -33,7 +33,15 @@ module.exports = {
     'import/order': 'warn',
     'import/no-extraneous-dependencies': 'off',
     'import/prefer-default-export': 'warn',
+    'react/prop-types': 'off',
     'react/jsx-no-useless-fragment': 'warn',
+    'react/function-component-definition': [
+      'warn',
+      {
+        namedComponents: 'arrow-function',
+        unnamedComponents: 'arrow-function',
+      },
+    ],
     'react-hooks/exhaustive-deps': 'warn',
   },
 };
