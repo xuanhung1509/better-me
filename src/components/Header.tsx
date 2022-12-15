@@ -8,32 +8,17 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/solid';
 
-type BaseNavItemType = {
+type BaseNavItem = {
   label: string;
   url: string;
 };
 
-type NavItemType = BaseNavItemType & {
+type NavItem = BaseNavItem & {
   isHashLink?: boolean;
-  children?: BaseNavItemType[];
+  children?: BaseNavItem[];
 };
 
-type LinkWrapperType = BaseNavItemType & {
-  isHashLink?: boolean;
-  className: string;
-  onClick?: () => void;
-};
-
-type DropdownType = {
-  label: string;
-  items: BaseNavItemType[];
-};
-
-type NavListType = {
-  onClick?: () => void;
-};
-
-const navItems: NavItemType[] = [
+const navItems: NavItem[] = [
   {
     label: 'Tính năng',
     url: '#features',
@@ -68,7 +53,13 @@ const navItems: NavItemType[] = [
   },
 ];
 
-const LinkWrapper: React.FC<LinkWrapperType> = ({
+type LinkWrapperProps = BaseNavItem & {
+  isHashLink?: boolean;
+  className: string;
+  onClick?: () => void;
+};
+
+const LinkWrapper: React.FC<LinkWrapperProps> = ({
   isHashLink,
   url,
   label,
@@ -90,7 +81,12 @@ const LinkWrapper: React.FC<LinkWrapperType> = ({
   );
 };
 
-const Dropdown: React.FC<DropdownType> = ({ label, items }) => (
+type DropdownProps = {
+  label: string;
+  items: BaseNavItem[];
+};
+
+const Dropdown: React.FC<DropdownProps> = ({ label, items }) => (
   <Menu>
     <Menu.Button className='mx-auto flex items-center justify-between gap-2 p-2'>
       {label}
@@ -127,7 +123,11 @@ const Dropdown: React.FC<DropdownType> = ({ label, items }) => (
   </Menu>
 );
 
-const NavList: React.FC<NavListType> = ({ onClick }) => (
+type NavListProps = {
+  onClick?: () => void;
+};
+
+const NavList: React.FC<NavListProps> = ({ onClick }) => (
   <ul className='absolute top-full left-0 flex w-full flex-col items-stretch gap-3 bg-white px-2 py-8 text-center md:static md:w-auto md:flex-row md:items-center md:bg-transparent md:py-0'>
     {navItems.map((item) => (
       <li key={item.label} className='group relative'>
