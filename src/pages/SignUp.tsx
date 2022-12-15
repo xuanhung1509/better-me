@@ -4,7 +4,19 @@ import googleIcon from '@/assets/images/google.svg';
 import facebookIcon from '@/assets/images/facebook.svg';
 import discordIcon from '@/assets/images/discord.svg';
 
-const socialLinks = [
+type SocialLink = {
+  icon: string;
+  alt: string;
+};
+
+type Input = {
+  label: string;
+  type: string;
+  id: string;
+  placeholder: string;
+};
+
+const socialLinks: SocialLink[] = [
   {
     icon: googleIcon,
     alt: 'google logo',
@@ -19,7 +31,7 @@ const socialLinks = [
   },
 ];
 
-const inputs = [
+const inputs: Input[] = [
   {
     label: 'Your name',
     type: 'text',
