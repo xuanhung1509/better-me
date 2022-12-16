@@ -9,13 +9,6 @@ type SocialLink = {
   alt: string;
 };
 
-type Input = {
-  label: string;
-  type: string;
-  id: string;
-  placeholder: string;
-};
-
 const socialLinks: SocialLink[] = [
   {
     icon: googleIcon,
@@ -30,6 +23,13 @@ const socialLinks: SocialLink[] = [
     alt: 'discord logo',
   },
 ];
+
+type Input = {
+  label: string;
+  type: string;
+  id: string;
+  placeholder: string;
+};
 
 const inputs: Input[] = [
   {
