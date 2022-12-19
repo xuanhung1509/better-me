@@ -34,6 +34,7 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
     'import/prefer-default-export': 'warn',
     'react/prop-types': 'off',
+    'react/jsx-key': 'warn',
     'react/jsx-no-useless-fragment': 'warn',
     'react/function-component-definition': [
       'warn',
