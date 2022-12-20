@@ -1,5 +1,6 @@
-import { Header } from '@/components';
 import { UserGroupIcon } from '@heroicons/react/24/solid';
+
+import GuestHeader from '@/components/Header/GuestHeader';
 import build from '@/assets/images/illustrations/build.png';
 import productLaunch from '@/assets/images/illustrations/product-launch.png';
 
@@ -23,7 +24,7 @@ const features = [
 
 const Landing: React.FC = () => (
   <>
-    <Header />
+    <GuestHeader />
     <main>
       <section id='hero' className='mt-8 py-8'>
         <div className='container'>
