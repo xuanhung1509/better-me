@@ -1,6 +1,6 @@
 import { UserGroupIcon } from '@heroicons/react/24/solid';
 
-import GuestHeader from '@/components/Header/GuestHeader';
+import { GuestHeader } from '@/components';
 import build from '@/assets/images/illustrations/build.png';
 import productLaunch from '@/assets/images/illustrations/product-launch.png';
 

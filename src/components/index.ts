@@ -1,3 +1,4 @@
-import Header from '@/components/Header/Header';
+import GuestHeader from '@/components/Header/GuestHeader';
+import SignedInHeader from '@/components/Header/SignedInHeader';
 
-export { Header };
+export { GuestHeader, SignedInHeader };
