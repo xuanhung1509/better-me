@@ -1,8 +1,83 @@
 import { useMemo, useRef, useState } from 'react';
+import { Dialog, Switch } from '@headlessui/react';
+import { Cog8ToothIcon } from '@heroicons/react/24/outline';
 import Countdown, { CountdownApi, zeroPad } from 'react-countdown';
+
+import { usePomodoroContext } from '@/contexts/PomodoroContext';
 import { Layout } from '@/components';
 
+type ModalProps = {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const Modal = ({ isOpen, setIsOpen }: ModalProps) => {
+  const { showGiveUpButton, setShowGiveUpButton } = usePomodoroContext();
+
+  return (
+    <Dialog
+      open={isOpen}
+      onClose={() => setIsOpen(false)}
+      className='relative z-50'
+    >
+      <div className='fixed inset-0 bg-slate-500/80' />
+      <div className='fixed inset-0 flex items-center justify-center p-4'>
+        <Dialog.Panel className='w-full max-w-sm rounded-lg bg-white p-8 shadow'>
+          <Dialog.Title className='text-2xl font-bold'>
+            Pomodoro Settings
+          </Dialog.Title>
+          <Dialog.Description className='mt-1 text-gray-500'>
+            Tweak these options however you like.
+          </Dialog.Description>
+
+          <ul className='mt-6 flex flex-col gap-2'>
+            <Switch.Group
+              as='li'
+              className='flex items-center justify-between gap-4'
+            >
+              <Switch.Label>Enable give up button</Switch.Label>
+              <Switch
+                checked={showGiveUpButton}
+                onChange={setShowGiveUpButton}
+                className={`${
+                  showGiveUpButton ? 'bg-green-500' : 'bg-gray-200'
+                } relative inline-flex h-6 w-11 items-center rounded-full`}
+              >
+                <span
+                  className={`${
+                    showGiveUpButton ? 'translate-x-6' : 'translate-x-1'
+                  } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+                />
+              </Switch>
+            </Switch.Group>
+          </ul>
+
+          <div className='mt-6 flex items-center justify-end gap-2'>
+            <button
+              type='button'
+              onClick={() => setIsOpen(false)}
+              className='rounded bg-green-300 px-4 py-2'
+            >
+              Apply
+            </button>
+            <button
+              type='button'
+              onClick={() => setIsOpen(false)}
+              className='rounded bg-slate-300 px-4 py-2'
+            >
+              Close
+            </button>
+          </div>
+        </Dialog.Panel>
+      </div>
+    </Dialog>
+  );
+};
+
 const Pomodoro = () => {
+  const { showGiveUpButton } = usePomodoroContext();
+
+  const [modalOpen, setModalOpen] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -195,13 +270,16 @@ const Pomodoro = () => {
             >
               {isPaused ? 'Resume' : 'Pause'}
             </button>
-            <button
-              type='button'
-              className='rounded bg-red-200 py-2 px-4'
-              onClick={handleResetClick}
-            >
-              Give up
-            </button>
+
+            {showGiveUpButton && (
+              <button
+                type='button'
+                className='rounded bg-red-200 py-2 px-4'
+                onClick={handleResetClick}
+              >
+                Give up
+              </button>
+            )}
           </div>
         )}
 
@@ -214,7 +292,15 @@ const Pomodoro = () => {
             Claim rewards
           </button>
         )}
+
+        {!isStarted && (
+          <button type='button' onClick={() => setModalOpen(true)}>
+            <Cog8ToothIcon className='h-8 w-6' />
+          </button>
+        )}
       </div>
+
+      <Modal isOpen={modalOpen} setIsOpen={setModalOpen} />
     </Layout>
   );
 };

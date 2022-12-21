@@ -7,18 +7,21 @@ import {
   SignIn,
   SignUp,
 } from '@/pages';
+import { PomodoroProvider } from '@/contexts/PomodoroContext';
 
 const App = () => (
-  <BrowserRouter>
-    <Routes>
-      <Route path='/' element={<Landing />} />
-      <Route path='/sign-up' element={<SignUp />} />
-      <Route path='/sign-in' element={<SignIn />} />
-      <Route path='/dashboard' element={<Dashboard />} />
-      <Route path='/pomodoro' element={<Pomodoro />} />
-      <Route path='/*' element={<NotFound />} />
-    </Routes>
-  </BrowserRouter>
+  <PomodoroProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Landing />} />
+        <Route path='/sign-up' element={<SignUp />} />
+        <Route path='/sign-in' element={<SignIn />} />
+        <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/pomodoro' element={<Pomodoro />} />
+        <Route path='/*' element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  </PomodoroProvider>
 );
 
 export default App;
