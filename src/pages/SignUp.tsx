@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm, UseFormRegisterReturn } from 'react-hook-form';
 
@@ -31,7 +31,7 @@ type FormData = {
   password2: string;
 };
 
-const SignUp: React.FC = () => {
+const SignUp = () => {
   const {
     register,
     getValues,
@@ -217,4 +217,5 @@ const SignUp: React.FC = () => {
     </section>
   );
 };
+
 export default SignUp;

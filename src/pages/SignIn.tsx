@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm, UseFormRegisterReturn } from 'react-hook-form';
 
@@ -29,7 +29,7 @@ type FormData = {
   password: string;
 };
 
-const SignIn: React.FC = () => {
+const SignIn = () => {
   const {
     register,
     formState: { errors, isSubmitSuccessful },
@@ -177,4 +177,5 @@ const SignIn: React.FC = () => {
     </section>
   );
 };
+
 export default SignIn;

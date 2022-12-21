@@ -52,18 +52,18 @@ const navItems: NavItem[] = [
 ];
 
 type LinkWrapperProps = BaseNavItem & {
+  className?: string;
   isHashLink?: boolean;
-  className: string;
   onClick?: () => void;
 };
 
-const LinkWrapper: React.FC<LinkWrapperProps> = ({
-  isHashLink,
-  url,
+const LinkWrapper = ({
   label,
+  url,
   className,
+  isHashLink,
   onClick,
-}) => {
+}: LinkWrapperProps) => {
   if (isHashLink) {
     return (
       <a href={url} {...{ className, onClick }}>
@@ -79,12 +79,18 @@ const LinkWrapper: React.FC<LinkWrapperProps> = ({
   );
 };
 
+LinkWrapper.defaultProps = {
+  className: '',
+  isHashLink: false,
+  onClick: () => {},
+};
+
 type DropdownProps = {
   label: string;
   items: BaseNavItem[];
 };
 
-const Dropdown: React.FC<DropdownProps> = ({ label, items }) => (
+const Dropdown = ({ label, items }: DropdownProps) => (
   <Menu>
     <Menu.Button className='mx-auto flex items-center justify-between gap-2 p-2'>
       {label}
@@ -126,7 +132,7 @@ type NavListProps = {
   onNavItemClick?: () => void;
 };
 
-const NavList: React.FC<NavListProps> = ({ items, onNavItemClick }) => (
+const NavList = ({ items, onNavItemClick }: NavListProps) => (
   <ul className='absolute top-full left-0 flex w-full flex-col items-stretch gap-3 bg-white px-2 py-8 text-center md:static md:w-auto md:flex-row md:items-center md:bg-transparent md:py-0'>
     {items.map((item) => (
       <li key={item.label} className='group relative'>
@@ -146,7 +152,11 @@ const NavList: React.FC<NavListProps> = ({ items, onNavItemClick }) => (
   </ul>
 );
 
-const GuestHeader: React.FC = () => {
+NavList.defaultProps = {
+  onNavItemClick: () => {},
+};
+
+const GuestHeader = () => {
   const isMD = useMediaQuery('(min-width: 768px)');
 
   return (
@@ -166,4 +176,5 @@ const GuestHeader: React.FC = () => {
     </Header>
   );
 };
+
 export default GuestHeader;

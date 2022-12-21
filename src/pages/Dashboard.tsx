@@ -18,7 +18,7 @@ type SidebarProps = {
   }>;
 };
 
-const Sidebar: React.FC<SidebarProps> = ({ items }) => (
+const Sidebar = ({ items }: SidebarProps) => (
   <nav className='fixed top-0 left-0 h-screen w-72 bg-slate-300 p-8 '>
     <Link to='/dashboard'>
       <h1 className='text-2xl font-bold'>BetterMe</h1>
@@ -40,7 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => (
   </nav>
 );
 
-const Dashboard: React.FC = () => {
+const Dashboard = () => {
   const navItems: Array<{
     label: string;
     url: string;

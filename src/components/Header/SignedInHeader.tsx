@@ -1,5 +1,3 @@
-import Header from '@/components/Header/Header';
-import MobileMenu from '@/components/Header/MobileMenu';
 import {
   ChartPieIcon,
   ClockIcon,
@@ -7,6 +5,9 @@ import {
   PencilSquareIcon,
   Squares2X2Icon,
 } from '@heroicons/react/24/outline';
+
+import Header from '@/components/Header/Header';
+import MobileMenu from '@/components/Header/MobileMenu';
 
 type NavItem = {
   label: string;
@@ -44,10 +45,9 @@ const navItems: NavItem[] = [
 
 type NavListProps = {
   items: NavItem[];
-  onNavItemClick?: () => void;
 };
 
-const NavList: React.FC<NavListProps> = ({ items }) => (
+const NavList = ({ items }: NavListProps) => (
   <ul className='absolute top-full left-0 flex w-full flex-col items-stretch gap-3 bg-white px-2 py-8 text-center'>
     {items.map(({ label, url, icon }) => (
       <li key={label} className='group relative'>

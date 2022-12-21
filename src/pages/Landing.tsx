@@ -22,7 +22,7 @@ const features = [
   },
 ];
 
-const Landing: React.FC = () => (
+const Landing = () => (
   <>
     <GuestHeader />
     <main>
@@ -130,4 +130,5 @@ const Landing: React.FC = () => (
     </footer>
   </>
 );
+
 export default Landing;
