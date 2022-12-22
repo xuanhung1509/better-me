@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 import { Dialog, Switch } from '@headlessui/react';
 import { Cog8ToothIcon } from '@heroicons/react/24/outline';
 import Countdown, { CountdownApi, zeroPad } from 'react-countdown';
@@ -81,7 +82,10 @@ const Pomodoro = () => {
   const [isStarted, setIsStarted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
-  const [sessionLength, setSessionLength] = useState(25);
+  const [sessionLength, setSessionLength] = useLocalStorage(
+    'sessionLength',
+    25,
+  );
   const sessionLengthInMilliseconds = sessionLength * 60 * 1000;
 
   const date = useMemo(
