@@ -1,4 +1,5 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useMemo } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 
 type PomodoroContextProps = {
   showGiveUpButton: boolean;
@@ -12,14 +13,17 @@ type PomodoroProviderProps = {
 };
 
 const PomodoroProvider = ({ children }: PomodoroProviderProps) => {
-  const [showGiveUpButton, setShowGiveUpButton] = useState(true);
+  const [showGiveUpButton, setShowGiveUpButton] = useLocalStorage(
+    'showGiveUpButton',
+    true,
+  );
 
   const contextValue = useMemo(
     () => ({
       showGiveUpButton,
       setShowGiveUpButton,
     }),
-    [showGiveUpButton],
+    [showGiveUpButton, setShowGiveUpButton],
   );
 
   return (
