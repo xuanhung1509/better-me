@@ -223,7 +223,7 @@ const Pomodoro = () => {
     }
   };
 
-  const handleCompleted = () => {
+  const handleCompleted = (): void => {
     setIsStarted(false);
     setIsPaused(false);
     setIsCompleted(true);
