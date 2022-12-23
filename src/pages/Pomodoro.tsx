@@ -175,7 +175,7 @@ const Pomodoro = () => {
 
   const isCompleted = timeLeft === 0;
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const minutes = Number(e.target.value);
 
     if (minutes < 1 || minutes > 180) {
@@ -187,13 +187,13 @@ const Pomodoro = () => {
     setIsStarted(false);
   };
 
-  const handleStartClick = (): void => {
+  const handleStart = () => {
     startCountdown();
     setIsStarted(true);
     setIsRunning(true);
   };
 
-  const handlePauseClick = (): void => {
+  const handlePause = () => {
     if (isRunning) {
       stopCountdown();
       setIsRunning(false);
@@ -205,7 +205,7 @@ const Pomodoro = () => {
 
   const isRunningBeforeResetClick = useRef(false);
 
-  const handleResetClick = (): void => {
+  const handleReset = () => {
     isRunningBeforeResetClick.current = isRunning;
 
     if (isRunningBeforeResetClick.current) {
@@ -229,7 +229,7 @@ const Pomodoro = () => {
     }
   }, [isCompleted]);
 
-  const handleClaimRewardsClick = (): void => {
+  const handleClaimRewards = () => {
     setSuccess((prev) => prev + 1);
     resetCountdown();
   };
@@ -252,7 +252,7 @@ const Pomodoro = () => {
         {!isStarted && !isCompleted && (
           <button
             type='button'
-            onClick={handleStartClick}
+            onClick={handleStart}
             className='rounded bg-red-200 py-2 px-4'
           >
             Start
@@ -263,7 +263,7 @@ const Pomodoro = () => {
           <div className='flex items-center justify-center gap-4'>
             <button
               type='button'
-              onClick={handlePauseClick}
+              onClick={handlePause}
               className='rounded bg-green-200 py-2 px-4'
             >
               {isRunning ? 'Pause' : 'Resume'}
@@ -271,7 +271,7 @@ const Pomodoro = () => {
             {showGiveUpButton && (
               <button
                 type='button'
-                onClick={handleResetClick}
+                onClick={handleReset}
                 className='rounded bg-red-200 py-2 px-4'
               >
                 Reset
@@ -283,7 +283,7 @@ const Pomodoro = () => {
         {isCompleted && (
           <button
             type='button'
-            onClick={handleClaimRewardsClick}
+            onClick={handleClaimRewards}
             className='rounded bg-red-200 py-2 px-4'
           >
             Claim rewards
