@@ -1,9 +1,9 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import { Dialog, Switch } from '@headlessui/react';
 import { Cog8ToothIcon } from '@heroicons/react/24/outline';
-import Countdown, { CountdownApi, zeroPad } from 'react-countdown';
 
+import { useCountdown } from '@/hooks';
 import { usePomodoroContext } from '@/contexts/PomodoroContext';
 import { Layout } from '@/components';
 
@@ -75,164 +75,138 @@ const Modal = ({ isOpen, setIsOpen }: ModalProps) => {
   );
 };
 
+type CountdownProps = {
+  sessionLength: number;
+  isStarted: boolean;
+  timeLeft: number;
+};
+
+const Countdown = ({ sessionLength, isStarted, timeLeft }: CountdownProps) => {
+  const timeElapsed = sessionLength - timeLeft;
+  const progress = isStarted ? (timeElapsed / sessionLength) * 100 : 0;
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = Math.floor(timeLeft % 60);
+
+  const radius = 50;
+  const strokeWidth = 3;
+  const normalizedRadius = radius - strokeWidth;
+  const circumference = normalizedRadius * 2 * Math.PI;
+  const strokeDashoffset = circumference - (progress / 100) * circumference;
+
+  const zeroPad = (number: number, length: number = 2): string =>
+    String(number).padStart(length, '0');
+
+  return (
+    <div className='relative'>
+      <svg
+        width='100%'
+        viewBox={`0 0 ${radius * 2} ${radius * 2}`}
+        className='-rotate-90'
+      >
+        <circle
+          cx={radius}
+          cy={radius}
+          r={normalizedRadius}
+          fill='#fff'
+          stroke='#eee'
+          strokeWidth={strokeWidth}
+        />
+        <circle
+          cx={radius}
+          cy={radius}
+          r={normalizedRadius}
+          fill='transparent'
+          stroke='green'
+          strokeLinecap='round'
+          strokeWidth={strokeWidth}
+          strokeDasharray={circumference}
+          strokeDashoffset={strokeDashoffset}
+          className='transition-[stroke-dashoffset]'
+        />
+      </svg>
+      <span className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl font-bold tracking-wider'>
+        {zeroPad(minutes)}:{zeroPad(seconds)}
+      </span>
+    </div>
+  );
+};
+
 const Pomodoro = () => {
   const { showGiveUpButton } = usePomodoroContext();
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [success, setSuccess] = useState(0);
   const [isStarted, setIsStarted] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
   const [sessionLength, setSessionLength] = useLocalStorage(
     'sessionLength',
-    25,
-  );
-  const sessionLengthInMilliseconds = sessionLength * 60 * 1000;
-
-  const date = useMemo(
-    () => Date.now() + sessionLengthInMilliseconds,
-    [sessionLengthInMilliseconds],
+    25 * 60,
   );
 
-  let countdownApi: CountdownApi | null = null;
+  const [timeLeft, { startCountdown, stopCountdown, resetCountdown }] =
+    useCountdown({
+      countStart: sessionLength,
+    });
 
-  const setRef = (countdown: Countdown | null): void => {
-    if (countdown) {
-      countdownApi = countdown.getApi();
-    }
-  };
-
-  const renderCountdown = ({
-    completed,
-    minutes,
-    seconds,
-    api,
-  }: {
-    completed: boolean;
-    minutes: number;
-    seconds: number;
-    api: CountdownApi;
-  }) => {
-    if (isStarted && api && api.isStopped()) {
-      console.log('Stopped.');
-    }
-
-    const timeElapsedInMilliseconds =
-      sessionLengthInMilliseconds - (minutes * 60 + seconds) * 1000;
-    const progress =
-      (timeElapsedInMilliseconds / sessionLengthInMilliseconds) * 100;
-
-    const radius = 50;
-    const strokeWidth = 3;
-    const normalizedRadius = radius - strokeWidth;
-    const circumference = normalizedRadius * 2 * Math.PI;
-    const strokeDashoffset = circumference - (progress / 100) * circumference;
-
-    if (completed) {
-      return <div>Completed</div>;
-    }
-
-    return (
-      <div className='relative'>
-        <svg
-          width='100%'
-          viewBox={`0 0 ${radius * 2} ${radius * 2}`}
-          className='-rotate-90'
-        >
-          <circle
-            cx={radius}
-            cy={radius}
-            r={normalizedRadius}
-            fill='#fff'
-            stroke='#eee'
-            strokeWidth={strokeWidth}
-          />
-          <circle
-            cx={radius}
-            cy={radius}
-            r={normalizedRadius}
-            fill='transparent'
-            stroke='green'
-            strokeLinecap='round'
-            strokeWidth={strokeWidth}
-            strokeDasharray={circumference}
-            strokeDashoffset={strokeDashoffset}
-            className='transition-[stroke-dashoffset]'
-          />
-        </svg>
-        <span className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl font-bold tracking-wider'>
-          {zeroPad(minutes)}:{zeroPad(seconds)}
-        </span>
-      </div>
-    );
-  };
+  const isCompleted = timeLeft === 0;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const minutes = Number(e.target.value);
 
-    if (minutes <= 0) {
+    if (minutes < 1 || minutes > 180) {
       alert('Invalid input. Must be between 1 and 180.');
       return;
     }
 
-    setSessionLength(Number(e.target.value));
+    setSessionLength(minutes * 60);
     setIsStarted(false);
-    setIsCompleted(false);
   };
 
   const handleStartClick = (): void => {
-    if (!countdownApi) return;
-
-    countdownApi.start();
+    startCountdown();
     setIsStarted(true);
+    setIsRunning(true);
   };
 
   const handlePauseClick = (): void => {
-    if (!countdownApi) return;
-
-    if (countdownApi.isPaused()) {
-      countdownApi.start();
-      setIsPaused(false);
+    if (isRunning) {
+      stopCountdown();
+      setIsRunning(false);
     } else {
-      countdownApi.pause();
-      setIsPaused(true);
+      startCountdown();
+      setIsRunning(true);
     }
   };
 
-  const isPausedBeforeGiveUpClick = useRef(false);
+  const isRunningBeforeResetClick = useRef(false);
 
   const handleResetClick = (): void => {
-    if (!countdownApi) return;
+    isRunningBeforeResetClick.current = isRunning;
 
-    isPausedBeforeGiveUpClick.current = countdownApi.isPaused();
-
-    if (!isPausedBeforeGiveUpClick.current) {
-      countdownApi.pause();
-      setIsPaused(true);
+    if (isRunningBeforeResetClick.current) {
+      stopCountdown();
+      setIsRunning(false);
     }
 
     if (window.confirm('Are you sure?')) {
-      countdownApi.stop();
+      resetCountdown();
       setIsStarted(false);
-      setIsPaused(false);
-      alert('Good luck next time!');
-    }
-
-    // FIXME: Don't know why this doesn't work
-    if (!isPausedBeforeGiveUpClick.current) {
-      countdownApi.start();
+    } else if (isRunningBeforeResetClick.current) {
+      startCountdown();
+      setIsRunning(true);
     }
   };
 
-  const handleCompleted = (): void => {
-    setIsStarted(false);
-    setIsPaused(false);
-    setIsCompleted(true);
-    alert('Amazing Good Job!!!');
-  };
+  useEffect(() => {
+    if (isCompleted) {
+      setIsRunning(false);
+      setIsStarted(false);
+    }
+  }, [isCompleted]);
 
-  const handleClaimRewardClick = (): void => {
-    setIsCompleted(false);
-    alert('Rewards claimed!');
+  const handleClaimRewardsClick = (): void => {
+    setSuccess((prev) => prev + 1);
+    resetCountdown();
   };
 
   return (
@@ -244,44 +218,38 @@ const Pomodoro = () => {
           max={180}
           className='w-32 bg-green-200 px-4 py-2'
           disabled={isStarted}
-          value={sessionLength}
+          value={sessionLength / 60}
           onChange={handleInputChange}
         />
-        <Countdown
-          ref={setRef}
-          date={date}
-          autoStart={false}
-          renderer={renderCountdown}
-          onComplete={handleCompleted}
-        />
+
+        <Countdown {...{ sessionLength, isStarted, timeLeft }} />
 
         {!isStarted && !isCompleted && (
           <button
             type='button'
-            className='rounded bg-red-200 py-2 px-4'
             onClick={handleStartClick}
+            className='rounded bg-red-200 py-2 px-4'
           >
             Start
           </button>
         )}
 
-        {isStarted && (
+        {isStarted && !isCompleted && (
           <div className='flex items-center justify-center gap-4'>
             <button
               type='button'
-              className='rounded bg-green-200 py-2 px-4'
               onClick={handlePauseClick}
+              className='rounded bg-green-200 py-2 px-4'
             >
-              {isPaused ? 'Resume' : 'Pause'}
+              {isRunning ? 'Pause' : 'Resume'}
             </button>
-
             {showGiveUpButton && (
               <button
                 type='button'
-                className='rounded bg-red-200 py-2 px-4'
                 onClick={handleResetClick}
+                className='rounded bg-red-200 py-2 px-4'
               >
-                Give up
+                Reset
               </button>
             )}
           </div>
@@ -290,8 +258,8 @@ const Pomodoro = () => {
         {isCompleted && (
           <button
             type='button'
+            onClick={handleClaimRewardsClick}
             className='rounded bg-red-200 py-2 px-4'
-            onClick={handleClaimRewardClick}
           >
             Claim rewards
           </button>
@@ -302,6 +270,8 @@ const Pomodoro = () => {
             <Cog8ToothIcon className='h-8 w-6' />
           </button>
         )}
+
+        <div>Success: {success}</div>
       </div>
 
       <Modal isOpen={modalOpen} setIsOpen={setModalOpen} />
