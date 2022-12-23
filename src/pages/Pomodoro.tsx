@@ -14,6 +14,31 @@ type ModalProps = {
 
 const Modal = ({ isOpen, setIsOpen }: ModalProps) => {
   const { showGiveUpButton, setShowGiveUpButton } = usePomodoroContext();
+  const prevStates = useRef({
+    showGiveUpButton,
+  });
+
+  const handleSwitch = () => {
+    prevStates.current.showGiveUpButton = showGiveUpButton;
+    setShowGiveUpButton((prev) => !prev);
+  };
+
+  const handleApply = () => {
+    prevStates.current.showGiveUpButton = showGiveUpButton;
+    setIsOpen(false);
+  };
+
+  const handleCancel = () => {
+    if (showGiveUpButton !== prevStates.current.showGiveUpButton) {
+      if (window.confirm('Do you want to save changes?')) {
+        prevStates.current.showGiveUpButton = showGiveUpButton;
+      } else {
+        setShowGiveUpButton(prevStates.current.showGiveUpButton);
+      }
+    }
+
+    setIsOpen(false);
+  };
 
   return (
     <Dialog
@@ -39,7 +64,7 @@ const Modal = ({ isOpen, setIsOpen }: ModalProps) => {
               <Switch.Label>Enable give up button</Switch.Label>
               <Switch
                 checked={showGiveUpButton}
-                onChange={setShowGiveUpButton}
+                onChange={handleSwitch}
                 className={`${
                   showGiveUpButton ? 'bg-green-500' : 'bg-gray-200'
                 } relative inline-flex h-6 w-11 items-center rounded-full`}
@@ -56,17 +81,17 @@ const Modal = ({ isOpen, setIsOpen }: ModalProps) => {
           <div className='mt-6 flex items-center justify-end gap-2'>
             <button
               type='button'
-              onClick={() => setIsOpen(false)}
+              onClick={handleApply}
               className='rounded bg-green-300 px-4 py-2'
             >
               Apply
             </button>
             <button
               type='button'
-              onClick={() => setIsOpen(false)}
+              onClick={handleCancel}
               className='rounded bg-slate-300 px-4 py-2'
             >
-              Close
+              Cancel
             </button>
           </div>
         </Dialog.Panel>
