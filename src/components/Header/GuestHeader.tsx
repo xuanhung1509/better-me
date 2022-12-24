@@ -27,12 +27,12 @@ const navItems: NavItem[] = [
     url: '/tools',
     children: [
       {
-        label: 'Solo Study',
-        url: '/solo-study',
+        label: 'Pomodoro',
+        url: '/pomodoro',
       },
       {
-        label: 'Calendar Todo List',
-        url: '/calendar-todo-list',
+        label: 'Planner',
+        url: '/planner',
       },
     ],
   },

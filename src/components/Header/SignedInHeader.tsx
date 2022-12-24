@@ -1,8 +1,8 @@
 import {
+  CalendarIcon,
   ChartPieIcon,
   ClockIcon,
   Cog8ToothIcon,
-  PencilSquareIcon,
   Squares2X2Icon,
 } from '@heroicons/react/24/outline';
 
@@ -27,9 +27,9 @@ const navItems: NavItem[] = [
     icon: <ClockIcon className='h-6 w-6 flex-shrink-0' />,
   },
   {
-    label: 'Todo List',
-    url: '/todolist',
-    icon: <PencilSquareIcon className='h-6 w-6 flex-shrink-0' />,
+    label: 'Planner',
+    url: '/planner',
+    icon: <CalendarIcon className='h-6 w-6 flex-shrink-0' />,
   },
   {
     label: 'Stats',
