@@ -4,6 +4,7 @@ import {
   Landing,
   NotFound,
   Pomodoro,
+  Planner,
   SignIn,
   SignUp,
 } from '@/pages';
@@ -18,6 +19,7 @@ const App = () => (
         <Route path='/sign-in' element={<SignIn />} />
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/pomodoro' element={<Pomodoro />} />
+        <Route path='/planner' element={<Planner />} />
         <Route path='/*' element={<NotFound />} />
       </Routes>
     </BrowserRouter>
