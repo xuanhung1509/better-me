@@ -1,18 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import { Dialog, Switch } from '@headlessui/react';
-import { Cog8ToothIcon } from '@heroicons/react/24/outline';
+import { Cog8ToothIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 import { useCountdown } from '@/hooks';
 import { usePomodoroContext } from '@/contexts/PomodoroContext';
 import { Layout } from '@/components';
 
-type ModalProps = {
+type SettingsProps = {
   isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose: () => void;
 };
 
-const Modal = ({ isOpen, setIsOpen }: ModalProps) => {
+const Settings = ({ isOpen, onClose }: SettingsProps) => {
   const { showGiveUpButton, setShowGiveUpButton } = usePomodoroContext();
   const prevStates = useRef({
     showGiveUpButton,
@@ -25,7 +25,7 @@ const Modal = ({ isOpen, setIsOpen }: ModalProps) => {
 
   const handleApply = () => {
     prevStates.current.showGiveUpButton = showGiveUpButton;
-    setIsOpen(false);
+    onClose();
   };
 
   const handleCancel = () => {
@@ -37,15 +37,11 @@ const Modal = ({ isOpen, setIsOpen }: ModalProps) => {
       }
     }
 
-    setIsOpen(false);
+    onClose();
   };
 
   return (
-    <Dialog
-      open={isOpen}
-      onClose={() => setIsOpen(false)}
-      className='relative z-50'
-    >
+    <Dialog open={isOpen} onClose={onClose} className='relative z-50'>
       <div className='fixed inset-0 bg-slate-500/80' />
       <div className='fixed inset-0 flex items-center justify-center p-4'>
         <Dialog.Panel className='w-full max-w-sm rounded-lg bg-white p-8 shadow'>
@@ -99,6 +95,36 @@ const Modal = ({ isOpen, setIsOpen }: ModalProps) => {
     </Dialog>
   );
 };
+
+type AlertProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  isSuccessful: boolean;
+};
+
+const Alert = ({ isOpen, onClose, isSuccessful }: AlertProps) => (
+  <Dialog open={isOpen} onClose={onClose} className='relative z-50'>
+    <div className='fixed inset-0 bg-slate-500/80' />
+    <div className='fixed inset-0 flex items-center justify-center p-4'>
+      <Dialog.Panel className='relative w-full max-w-sm rounded-lg bg-white p-8 text-center shadow-2xl'>
+        <Dialog.Title className='text-2xl font-bold'>
+          {isSuccessful ? 'Congratulations!' : 'Oops!'}
+        </Dialog.Title>
+        <Dialog.Description className='mt-1 text-gray-500'>
+          {isSuccessful ? 'Keep up the good work.' : 'Better luck next time.'}
+        </Dialog.Description>
+
+        <button
+          type='button'
+          onClick={onClose}
+          className='absolute top-2 right-2 rounded-full p-2 transition-colors hover:bg-slate-200'
+        >
+          <XMarkIcon className='h-4 w-4' />
+        </button>
+      </Dialog.Panel>
+    </div>
+  </Dialog>
+);
 
 type CountdownProps = {
   sessionLength: number;
@@ -159,7 +185,8 @@ const Countdown = ({ sessionLength, isStarted, timeLeft }: CountdownProps) => {
 const Pomodoro = () => {
   const { showGiveUpButton } = usePomodoroContext();
 
-  const [modalOpen, setModalOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
   const [success, setSuccess] = useState(0);
   const [isStarted, setIsStarted] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
@@ -214,7 +241,7 @@ const Pomodoro = () => {
     }
 
     if (window.confirm('Are you sure?')) {
-      resetCountdown();
+      setAlertOpen(true);
       setIsStarted(false);
     } else if (isRunningBeforeResetClick.current) {
       startCountdown();
@@ -225,12 +252,20 @@ const Pomodoro = () => {
   useEffect(() => {
     if (isCompleted) {
       setIsRunning(false);
-      setIsStarted(false);
+
+      setTimeout(() => {
+        setIsStarted(false);
+        setAlertOpen(true);
+      }, 300);
     }
   }, [isCompleted]);
 
-  const handleClaimRewards = () => {
-    setSuccess((prev) => prev + 1);
+  const handleCloseAlert = () => {
+    if (isCompleted) {
+      setSuccess((prev) => prev + 1);
+    }
+
+    setAlertOpen(false);
     resetCountdown();
   };
 
@@ -280,18 +315,8 @@ const Pomodoro = () => {
           </div>
         )}
 
-        {isCompleted && (
-          <button
-            type='button'
-            onClick={handleClaimRewards}
-            className='rounded bg-red-200 py-2 px-4'
-          >
-            Claim rewards
-          </button>
-        )}
-
         {!isStarted && (
-          <button type='button' onClick={() => setModalOpen(true)}>
+          <button type='button' onClick={() => setSettingsOpen(true)}>
             <Cog8ToothIcon className='h-8 w-6' />
           </button>
         )}
@@ -299,7 +324,15 @@ const Pomodoro = () => {
         <div>Success: {success}</div>
       </div>
 
-      <Modal isOpen={modalOpen} setIsOpen={setModalOpen} />
+      {alertOpen && (
+        <Alert
+          isOpen={alertOpen}
+          onClose={handleCloseAlert}
+          isSuccessful={isCompleted}
+        />
+      )}
+
+      <Settings isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </Layout>
   );
 };
