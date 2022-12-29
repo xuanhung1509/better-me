@@ -43,12 +43,12 @@ const navItems: NavItem[] = [
   },
 ];
 
-type NavListProps = {
+type NavMenuProps = {
   items: NavItem[];
 };
 
-const NavList = ({ items }: NavListProps) => (
-  <ul className='absolute top-full left-0 flex w-full flex-col items-stretch gap-3 bg-white px-2 py-8 text-center'>
+const NavMenu = ({ items }: NavMenuProps) => (
+  <ul className='absolute top-0 right-0 flex h-screen w-3/4 flex-col items-stretch gap-3 bg-white px-2 pb-8 pt-24 text-center'>
     {items.map(({ label, url, icon }) => (
       <li key={label} className='group relative'>
         <a href={url} className='flex items-center justify-center gap-4 p-2'>
@@ -62,11 +62,11 @@ const NavList = ({ items }: NavListProps) => (
 const SignedInHeader = () => (
   <Header>
     <div className='container relative'>
-      <div className='flex items-center justify-between gap-4 py-6'>
-        <a href='/dashboard' className='text-2xl font-bold'>
+      <div className='flex items-center justify-between gap-4 py-4'>
+        <a href='/dashboard' className='text-xl font-bold'>
           Dashboard
         </a>
-        <MobileMenu<NavItem> items={navItems} NavMenu={NavList} />
+        <MobileMenu<NavItem> items={navItems} NavMenu={NavMenu} />
       </div>
     </div>
   </Header>

@@ -127,13 +127,13 @@ const Dropdown = ({ label, items }: DropdownProps) => (
   </Menu>
 );
 
-type NavListProps = {
+type NavMenuProps = {
   items: NavItem[];
   onNavItemClick?: () => void;
 };
 
-const NavList = ({ items, onNavItemClick }: NavListProps) => (
-  <ul className='absolute top-full left-0 flex w-full flex-col items-stretch gap-3 bg-white px-2 py-8 text-center md:static md:w-auto md:flex-row md:items-center md:bg-transparent md:py-0'>
+const NavMenu = ({ items, onNavItemClick }: NavMenuProps) => (
+  <ul className='absolute top-0 right-0 flex h-screen w-3/4 flex-col items-stretch gap-3 bg-white px-2 pb-8 pt-24 text-center md:static md:w-auto md:flex-row md:items-center md:bg-transparent md:py-0'>
     {items.map((item) => (
       <li key={item.label} className='group relative'>
         {item.children ? (
@@ -152,7 +152,7 @@ const NavList = ({ items, onNavItemClick }: NavListProps) => (
   </ul>
 );
 
-NavList.defaultProps = {
+NavMenu.defaultProps = {
   onNavItemClick: () => {},
 };
 
@@ -162,14 +162,14 @@ const GuestHeader = () => {
   return (
     <Header>
       <div className='container relative'>
-        <div className='flex items-center justify-between gap-4 py-6'>
+        <div className='flex items-center justify-between gap-4 py-4'>
           <a href='/' className='text-2xl font-bold'>
             BetterMe
           </a>
           {isMD ? (
-            <NavList items={navItems} />
+            <NavMenu items={navItems} />
           ) : (
-            <MobileMenu<NavItem> items={navItems} NavMenu={NavList} />
+            <MobileMenu<NavItem> items={navItems} NavMenu={NavMenu} />
           )}
         </div>
       </div>
