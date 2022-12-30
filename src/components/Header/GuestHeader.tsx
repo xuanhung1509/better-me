@@ -92,7 +92,7 @@ type DropdownProps = {
 
 const Dropdown = ({ label, items }: DropdownProps) => (
   <Menu>
-    <Menu.Button className='mx-auto flex items-center justify-between gap-2 p-2'>
+    <Menu.Button className='mx-auto flex items-center justify-between gap-2 p-3'>
       {label}
       <ChevronDownIcon className='h-4 w-4 ui-open:rotate-180 ui-not-open:rotate-0' />
     </Menu.Button>
@@ -133,9 +133,12 @@ type NavMenuProps = {
 };
 
 const NavMenu = ({ items, onNavItemClick }: NavMenuProps) => (
-  <ul className='absolute top-0 right-0 flex h-screen w-full flex-col items-stretch gap-3 bg-white px-2 pb-8 pt-24 text-center md:static md:h-auto md:w-auto md:flex-row md:items-center md:bg-transparent md:py-0'>
+  <ul className='absolute top-0 right-0 flex h-screen w-full flex-col items-stretch gap-1 bg-white px-2 pb-8 pt-24 text-center md:static md:h-auto md:w-auto md:flex-row md:items-center md:bg-transparent md:py-0'>
     {items.map((item) => (
-      <li key={item.label} className='group relative'>
+      <li
+        key={item.label}
+        className='group relative rounded-lg active:bg-slate-200 last:active:bg-transparent'
+      >
         {item.children ? (
           <Dropdown label={item.label} items={item.children} />
         ) : (
@@ -143,7 +146,7 @@ const NavMenu = ({ items, onNavItemClick }: NavMenuProps) => (
             isHashLink={item.isHashLink}
             url={item.url}
             label={item.label}
-            className='inline-block p-2 group-last:rounded group-last:bg-green-500 group-last:px-8 group-last:py-2 group-last:text-white'
+            className='inline-block p-3 group-last:mt-2 group-last:rounded group-last:bg-slate-700 group-last:px-8 group-last:py-2 group-last:text-white group-last:active:bg-slate-500 group-last:md:mt-0'
             onClick={onNavItemClick}
           />
         )}
