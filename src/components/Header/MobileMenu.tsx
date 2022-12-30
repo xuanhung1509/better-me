@@ -42,6 +42,7 @@ const PopoverContent = <T,>({
         {open && (
           <>
             <motion.div
+              key='backdrop'
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -55,6 +56,7 @@ const PopoverContent = <T,>({
               className='absolute top-0 right-0 h-screen w-3/4 overflow-x-hidden'
             >
               <motion.div
+                key='nav-menu'
                 initial={{ x: '100%' }}
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
