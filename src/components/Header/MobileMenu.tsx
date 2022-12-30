@@ -1,6 +1,7 @@
 import { useLockedBody } from 'usehooks-ts';
-import { Popover, Transition } from '@headlessui/react';
+import { Popover } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
+import { AnimatePresence, motion } from 'framer-motion';
 
 type PopoverContentProps<T> = MobileMenuProps<T> & {
   open: boolean;
@@ -21,9 +22,15 @@ const PopoverContent = <T,>({
 }: PopoverContentProps<T>) => {
   useLockedBody(open, 'root');
 
+  const transition = {
+    type: 'spring',
+    mass: 0.1,
+    stiffness: 150,
+  };
+
   return (
     <>
-      <Popover.Button className='relative z-20 rounded-full p-2 transition-colors hover:bg-slate-100'>
+      <Popover.Button className='relative z-20 rounded-full p-2 transition-colors hover:bg-slate-100 active:bg-slate-200'>
         {open ? (
           <XMarkIcon className='h-6 w-6' />
         ) : (
@@ -31,19 +38,34 @@ const PopoverContent = <T,>({
         )}
       </Popover.Button>
 
-      <Transition
-        enter='transition-opacity duration-100'
-        enterFrom='opacity-0'
-        enterTo='opacity-100'
-        leave='transition-opacity duration-75'
-        leaveFrom='opacity-100'
-        leaveTo='opacity-0'
-      >
-        <Popover.Overlay className='fixed inset-0 bg-black/30' />
-        <Popover.Panel>
-          <NavMenu items={items} onNavItemClick={close} />
-        </Popover.Panel>
-      </Transition>
+      <AnimatePresence>
+        {open && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={transition}
+            >
+              <Popover.Overlay static className='fixed inset-0 bg-black/30' />
+            </motion.div>
+
+            <Popover.Panel
+              static
+              className='absolute top-0 right-0 h-screen w-3/4 overflow-x-hidden'
+            >
+              <motion.div
+                initial={{ x: '100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '100%' }}
+                transition={transition}
+              >
+                <NavMenu items={items} onNavItemClick={close} />
+              </motion.div>
+            </Popover.Panel>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 };

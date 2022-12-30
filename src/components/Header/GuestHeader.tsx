@@ -133,7 +133,7 @@ type NavMenuProps = {
 };
 
 const NavMenu = ({ items, onNavItemClick }: NavMenuProps) => (
-  <ul className='absolute top-0 right-0 flex h-screen w-3/4 flex-col items-stretch gap-3 bg-white px-2 pb-8 pt-24 text-center md:static md:h-auto md:w-auto md:flex-row md:items-center md:bg-transparent md:py-0'>
+  <ul className='absolute top-0 right-0 flex h-screen w-full flex-col items-stretch gap-3 bg-white px-2 pb-8 pt-24 text-center md:static md:h-auto md:w-auto md:flex-row md:items-center md:bg-transparent md:py-0'>
     {items.map((item) => (
       <li key={item.label} className='group relative'>
         {item.children ? (
@@ -161,7 +161,7 @@ const GuestHeader = () => {
 
   return (
     <Header>
-      <div className='container relative'>
+      <div className='container'>
         <div className='flex items-center justify-between gap-4 py-4'>
           <a href='/' className='text-2xl font-bold'>
             BetterMe

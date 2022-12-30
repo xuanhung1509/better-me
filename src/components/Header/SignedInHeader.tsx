@@ -48,9 +48,9 @@ type NavMenuProps = {
 };
 
 const NavMenu = ({ items }: NavMenuProps) => (
-  <ul className='absolute top-0 right-0 flex h-screen w-3/4 flex-col items-stretch gap-3 bg-white px-2 pb-8 pt-24 text-center'>
+  <ul className='absolute top-0 right-0 flex h-screen w-full flex-col items-stretch gap-3 bg-white px-2 pb-8 pt-24 text-center'>
     {items.map(({ label, url, icon }) => (
-      <li key={label} className='group relative'>
+      <li key={label}>
         <a href={url} className='flex items-center justify-center gap-4 p-2'>
           {icon} {label}
         </a>
@@ -61,7 +61,7 @@ const NavMenu = ({ items }: NavMenuProps) => (
 
 const SignedInHeader = () => (
   <Header>
-    <div className='container relative'>
+    <div className='container'>
       <div className='flex items-center justify-between gap-4 py-4'>
         <a href='/dashboard' className='text-xl font-bold'>
           Dashboard
