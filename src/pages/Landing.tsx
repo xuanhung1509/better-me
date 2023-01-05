@@ -146,7 +146,7 @@ const Landing = () => {
           </span>
           <div className='container relative'>
             <div className='flex flex-col items-center justify-between gap-8 px-8 md:flex-row'>
-              <h2 className='text-2xl font-bold text-white md:text-3xl'>
+              <h2 className='text-center text-2xl font-bold text-white md:text-left md:text-3xl'>
                 Start learning with your community today.
               </h2>
               <button
