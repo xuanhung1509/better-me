@@ -30,7 +30,7 @@ const PopoverContent = <T,>({
 
   return (
     <>
-      <Popover.Button className='relative z-20 rounded-full p-2 transition-colors hover:bg-slate-100 active:bg-slate-200'>
+      <Popover.Button className='relative z-20 rounded-full p-2 transition-colors hover:bg-red-100 active:bg-red-200'>
         {open ? (
           <XMarkIcon className='h-6 w-6' />
         ) : (

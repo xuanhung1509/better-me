@@ -145,75 +145,91 @@ const SignUp = () => {
 
   return (
     <section className='py-8'>
-      <form
-        className='mx-auto max-w-xl rounded bg-gray-800 px-16 py-8 text-white'
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <h1 className='text-center text-3xl font-bold'>Create an Account</h1>
-        <p className='mt-2 text-center text-gray-400'>
-          Lorem ipsum dolor sit amet consectetur adipisicing
-        </p>
+      <div className='container'>
+        <form
+          className='mx-auto mt-4 max-w-md px-4 md:mt-8'
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <h1 className='text-center font-[Merriweather] text-2xl font-black leading-snug md:text-3xl'>
+            Create an Account
+          </h1>
+          <p className='mt-2 text-center text-gray-500'>
+            Lorem ipsum dolor sit amet consectetur adipisicing
+          </p>
 
-        <div className='mt-8'>
-          <h2 className='text-center text-xl'>Sign up with Social Media</h2>
-          <div className='mt-4 flex items-center justify-center gap-4'>
-            {socialLinks.map(({ icon, alt }) => (
-              <button
-                key={alt}
-                type='button'
-                className='rounded-xl bg-white p-3'
-              >
-                <img src={icon} alt={alt} className='h-7 w-7' />
-              </button>
-            ))}
+          <div className='mt-8'>
+            <h2 className='text-center text-lg md:text-xl'>
+              Sign up with Social Media
+            </h2>
+            <div className='mt-4 flex items-center justify-center gap-4'>
+              {socialLinks.map(({ icon, alt }) => (
+                <button
+                  key={alt}
+                  type='button'
+                  className='rounded-2xl border p-3 outline-none transition-shadow hover:border-yellow-500 hover:shadow-lg focus:outline-yellow-500'
+                >
+                  <img src={icon} alt={alt} className='h-7 w-7' />
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        <div className='mt-8'>
-          {inputs.map(
-            ({ label, type, id, placeholder, registerInput, inputErrors }) => (
-              <Fragment key={id}>
-                <label htmlFor={id} className='mt-6 block'>
-                  <span className='font-bold'>{label}</span>
-                  <input
-                    type={type}
-                    id={id}
-                    placeholder={placeholder}
-                    className='mt-2 w-full rounded-md px-4 py-3 text-black focus:outline-green-500'
-                    // eslint-disable-next-line react/jsx-props-no-spreading
-                    {...registerInput}
-                  />
-                </label>
+          <div className='mt-8'>
+            {inputs.map(
+              ({
+                label,
+                type,
+                id,
+                placeholder,
+                registerInput,
+                inputErrors,
+              }) => (
+                <Fragment key={id}>
+                  <label htmlFor={id} className='mt-6 block'>
+                    <span className='font-bold'>{label}</span>
+                    <input
+                      type={type}
+                      id={id}
+                      placeholder={placeholder}
+                      className='mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-none focus:outline-yellow-500'
+                      // eslint-disable-next-line react/jsx-props-no-spreading
+                      {...registerInput}
+                    />
+                  </label>
 
-                {inputErrors.map(
-                  (err) =>
-                    errors[id as keyof FormData]?.type === err.type && (
-                      <small
-                        key={`${id} ${err.type}`}
-                        className='mt-2 block text-red-400'
-                      >
-                        {err.message}
-                      </small>
-                    ),
-                )}
-              </Fragment>
-            ),
-          )}
+                  {inputErrors.map(
+                    (err) =>
+                      errors[id as keyof FormData]?.type === err.type && (
+                        <small
+                          key={`${id} ${err.type}`}
+                          className='mt-2 block text-red-600'
+                        >
+                          {err.message}
+                        </small>
+                      ),
+                  )}
+                </Fragment>
+              ),
+            )}
 
-          <button
-            type='submit'
-            className='mt-6 w-full rounded bg-green-500 px-6 py-3 text-white'
-          >
-            Sign Up
-          </button>
-        </div>
-        <small className='mt-6 block text-center text-sm'>
-          Already have an account?
-          <Link to='/sign-in' className='ml-1 inline-block text-green-500'>
-            Sign In
-          </Link>
-        </small>
-      </form>
+            <button
+              type='submit'
+              className='mt-6 w-full rounded-2xl bg-red-500 px-6 py-3 font-bold text-white outline-none hover:bg-red-300 focus:outline-yellow-500 active:bg-red-100'
+            >
+              Sign Up
+            </button>
+          </div>
+          <small className='mt-6 block text-center text-sm'>
+            Already have an account?
+            <Link
+              to='/sign-in'
+              className='ml-1 inline-block text-red-500 outline-none focus:outline-yellow-500'
+            >
+              Sign In
+            </Link>
+          </small>
+        </form>
+      </div>
     </section>
   );
 };
