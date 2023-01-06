@@ -1,100 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
-import { Dialog, Switch } from '@headlessui/react';
-import { Cog8ToothIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Dialog } from '@headlessui/react';
+import {
+  MinusIcon,
+  PencilIcon,
+  PlusIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline';
 
 import { useCountdown } from '@/hooks';
 import { usePomodoroContext } from '@/contexts/PomodoroContext';
 import { Layout } from '@/components';
-
-type SettingsProps = {
-  isOpen: boolean;
-  onClose: () => void;
-};
-
-const Settings = ({ isOpen, onClose }: SettingsProps) => {
-  const { showGiveUpButton, setShowGiveUpButton } = usePomodoroContext();
-  const prevStates = useRef({
-    showGiveUpButton,
-  });
-
-  const handleSwitch = () => {
-    prevStates.current.showGiveUpButton = showGiveUpButton;
-    setShowGiveUpButton((prev) => !prev);
-  };
-
-  const handleApply = () => {
-    prevStates.current.showGiveUpButton = showGiveUpButton;
-    onClose();
-  };
-
-  const handleCancel = () => {
-    if (showGiveUpButton !== prevStates.current.showGiveUpButton) {
-      if (window.confirm('Do you want to save changes?')) {
-        prevStates.current.showGiveUpButton = showGiveUpButton;
-      } else {
-        setShowGiveUpButton(prevStates.current.showGiveUpButton);
-      }
-    }
-
-    onClose();
-  };
-
-  return (
-    <Dialog open={isOpen} onClose={onClose} className='relative z-50'>
-      <div className='fixed inset-0 bg-slate-500/80' />
-      <div className='fixed inset-0 flex items-center justify-center p-4'>
-        <Dialog.Panel className='w-full max-w-sm rounded-lg bg-white p-8 shadow'>
-          <Dialog.Title className='text-2xl font-bold'>
-            Pomodoro Settings
-          </Dialog.Title>
-          <Dialog.Description className='mt-1 text-gray-500'>
-            Tweak these options however you like.
-          </Dialog.Description>
-
-          <ul className='mt-6 flex flex-col gap-2'>
-            <Switch.Group
-              as='li'
-              className='flex items-center justify-between gap-4'
-            >
-              <Switch.Label>Enable give up button</Switch.Label>
-              <Switch
-                checked={showGiveUpButton}
-                onChange={handleSwitch}
-                className={`${
-                  showGiveUpButton ? 'bg-green-500' : 'bg-gray-200'
-                } relative inline-flex h-6 w-11 items-center rounded-full`}
-              >
-                <span
-                  className={`${
-                    showGiveUpButton ? 'translate-x-6' : 'translate-x-1'
-                  } inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                />
-              </Switch>
-            </Switch.Group>
-          </ul>
-
-          <div className='mt-6 flex items-center justify-end gap-2'>
-            <button
-              type='button'
-              onClick={handleApply}
-              className='rounded bg-green-300 px-4 py-2'
-            >
-              Apply
-            </button>
-            <button
-              type='button'
-              onClick={handleCancel}
-              className='rounded bg-slate-300 px-4 py-2'
-            >
-              Cancel
-            </button>
-          </div>
-        </Dialog.Panel>
-      </div>
-    </Dialog>
-  );
-};
+import iceCream from '@/assets/images/illustrations/ice-cream.svg';
+import zombieing from '@/assets/images/illustrations/zombieing.svg';
 
 type AlertProps = {
   isOpen: boolean;
@@ -106,12 +24,17 @@ const Alert = ({ isOpen, onClose, isSuccessful }: AlertProps) => (
   <Dialog open={isOpen} onClose={onClose} className='relative z-50'>
     <div className='fixed inset-0 bg-slate-500/80' />
     <div className='fixed inset-0 flex items-center justify-center p-4'>
-      <Dialog.Panel className='relative w-full max-w-sm rounded-lg bg-white p-8 text-center shadow-2xl'>
+      <Dialog.Panel className='relative w-full max-w-sm rounded-3xl bg-white p-8 text-center shadow-2xl'>
         <Dialog.Title className='text-2xl font-bold'>
           {isSuccessful ? 'Congratulations!' : 'Oops!'}
         </Dialog.Title>
-        <Dialog.Description className='mt-1 text-gray-500'>
-          {isSuccessful ? 'Keep up the good work.' : 'Better luck next time.'}
+        <Dialog.Description className='mt-1'>
+          <p className='text-gray-500'>
+            {isSuccessful ? 'Keep up the good work.' : 'Better luck next time.'}
+          </p>
+          <div className='mt-6'>
+            <img src={isSuccessful ? iceCream : zombieing} alt='' />
+          </div>
         </Dialog.Description>
 
         <button
@@ -129,10 +52,21 @@ const Alert = ({ isOpen, onClose, isSuccessful }: AlertProps) => (
 type CountdownProps = {
   sessionLength: number;
   isStarted: boolean;
+  isRunning: boolean;
+  isCompleted: boolean;
   timeLeft: number;
+  handleReset: () => void;
 };
 
-const Countdown = ({ sessionLength, isStarted, timeLeft }: CountdownProps) => {
+const Countdown = ({
+  sessionLength,
+  isStarted,
+  isRunning,
+  isCompleted,
+  timeLeft,
+  handleReset,
+}: CountdownProps) => {
+  const { showGiveUpButton } = usePomodoroContext();
   const timeElapsed = sessionLength - timeLeft;
   const progress = isStarted ? (timeElapsed / sessionLength) * 100 : 0;
   const minutes = Math.floor(timeLeft / 60);
@@ -148,7 +82,7 @@ const Countdown = ({ sessionLength, isStarted, timeLeft }: CountdownProps) => {
     String(number).padStart(length, '0');
 
   return (
-    <div className='relative'>
+    <div className='relative w-64'>
       <svg
         width='100%'
         viewBox={`0 0 ${radius * 2} ${radius * 2}`}
@@ -159,7 +93,7 @@ const Countdown = ({ sessionLength, isStarted, timeLeft }: CountdownProps) => {
           cy={radius}
           r={normalizedRadius}
           fill='#fff'
-          stroke='#eee'
+          stroke='rgb(236 252 203)'
           strokeWidth={strokeWidth}
         />
         <circle
@@ -167,7 +101,7 @@ const Countdown = ({ sessionLength, isStarted, timeLeft }: CountdownProps) => {
           cy={radius}
           r={normalizedRadius}
           fill='transparent'
-          stroke='green'
+          stroke='rgb(132 204 22)'
           strokeLinecap='round'
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
@@ -175,17 +109,30 @@ const Countdown = ({ sessionLength, isStarted, timeLeft }: CountdownProps) => {
           className='transition-[stroke-dashoffset]'
         />
       </svg>
-      <span className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl font-bold tracking-wider'>
-        {zeroPad(minutes)}:{zeroPad(seconds)}
-      </span>
+      <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+        <span
+          className={`text-5xl font-semibold tracking-wider text-gray-900 ${
+            isStarted && !isRunning && 'animate-ping'
+          }`}
+        >
+          {zeroPad(minutes)}:{zeroPad(seconds)}
+        </span>
+
+        {isStarted && !isCompleted && showGiveUpButton && (
+          <button
+            type='button'
+            onClick={handleReset}
+            className='absolute top-20 left-1/2 -translate-x-1/2 text-sm'
+          >
+            Reset
+          </button>
+        )}
+      </div>
     </div>
   );
 };
 
 const Pomodoro = () => {
-  const { showGiveUpButton } = usePomodoroContext();
-
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [success, setSuccess] = useState(0);
   const [isStarted, setIsStarted] = useState(false);
@@ -201,18 +148,6 @@ const Pomodoro = () => {
     });
 
   const isCompleted = timeLeft === 0;
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const minutes = Number(e.target.value);
-
-    if (minutes < 1 || minutes > 180) {
-      alert('Invalid input. Must be between 1 and 180.');
-      return;
-    }
-
-    setSessionLength(minutes * 60);
-    setIsStarted(false);
-  };
 
   const handleStart = () => {
     startCountdown();
@@ -272,23 +207,64 @@ const Pomodoro = () => {
   return (
     <Layout>
       <div className='flex flex-col items-center justify-center gap-4'>
-        <input
-          type='number'
-          min={1}
-          max={180}
-          className='w-32 bg-green-200 px-4 py-2'
-          disabled={isStarted}
-          value={sessionLength / 60}
-          onChange={handleInputChange}
+        <div className='flex w-60 items-center justify-center gap-4 rounded-2xl bg-lime-200 px-8 py-2'>
+          Enter your task
+          <PencilIcon className='h-4 w-4' />
+        </div>
+
+        <Countdown
+          {...{
+            sessionLength,
+            isStarted,
+            isRunning,
+            isCompleted,
+            timeLeft,
+            handleReset,
+          }}
         />
 
-        <Countdown {...{ sessionLength, isStarted, timeLeft }} />
+        {!isStarted && !isCompleted && (
+          <div className='flex items-center gap-4'>
+            <button
+              type='button'
+              disabled={sessionLength / 60 <= 15}
+              onClick={() => {
+                setSessionLength((prev) => {
+                  if (prev / 60 > 15) {
+                    return prev - 5 * 60;
+                  }
+
+                  return prev;
+                });
+              }}
+              className='rounded-full bg-lime-500 p-3 text-white disabled:bg-gray-300'
+            >
+              <MinusIcon className='h-6 w-6' />
+            </button>
+            <button
+              type='button'
+              disabled={sessionLength / 60 >= 120}
+              onClick={() => {
+                setSessionLength((prev) => {
+                  if (prev / 60 < 120) {
+                    return prev + 5 * 60;
+                  }
+
+                  return prev;
+                });
+              }}
+              className='rounded-full bg-lime-500 p-3 text-white disabled:bg-gray-300'
+            >
+              <PlusIcon className='h-6 w-6' />
+            </button>
+          </div>
+        )}
 
         {!isStarted && !isCompleted && (
           <button
             type='button'
             onClick={handleStart}
-            className='rounded bg-red-200 py-2 px-4'
+            className='rounded-2xl bg-red-500 py-3 px-8 text-lg font-bold text-white'
           >
             Start
           </button>
@@ -299,29 +275,12 @@ const Pomodoro = () => {
             <button
               type='button'
               onClick={handlePause}
-              className='rounded bg-green-200 py-2 px-4'
+              className='rounded-2xl bg-lime-500 py-4 px-8 text-white'
             >
               {isRunning ? 'Pause' : 'Resume'}
             </button>
-            {showGiveUpButton && (
-              <button
-                type='button'
-                onClick={handleReset}
-                className='rounded bg-red-200 py-2 px-4'
-              >
-                Reset
-              </button>
-            )}
           </div>
         )}
-
-        {!isStarted && (
-          <button type='button' onClick={() => setSettingsOpen(true)}>
-            <Cog8ToothIcon className='h-8 w-6' />
-          </button>
-        )}
-
-        <div>Success: {success}</div>
       </div>
 
       {alertOpen && (
@@ -331,8 +290,6 @@ const Pomodoro = () => {
           isSuccessful={isCompleted}
         />
       )}
-
-      <Settings isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </Layout>
   );
 };
