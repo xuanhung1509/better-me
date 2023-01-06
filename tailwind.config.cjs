@@ -15,6 +15,9 @@ module.exports = {
       },
     },
   },
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   // eslint-disable-next-line global-require
   plugins: [require('@headlessui/tailwindcss')],
 };
