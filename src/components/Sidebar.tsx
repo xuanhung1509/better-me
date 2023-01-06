@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import classnames from '@/utils/classnames';
 
 type SidebarProps = {
   items: Array<{
@@ -18,9 +19,10 @@ const Sidebar = ({ items }: SidebarProps) => (
         <li key={label}>
           <Link
             to={url}
-            className={`flex items-center justify-start gap-4 rounded-lg p-4 hover:bg-slate-400 hover:text-white ${
-              url === '/dashboard' && 'bg-slate-800 text-white'
-            }`}
+            className={classnames(
+              'flex items-center justify-start gap-4 rounded-lg p-4 hover:bg-slate-400 hover:text-white',
+              url === '/dashboard' && 'bg-slate-800 text-white',
+            )}
           >
             {icon} {label}
           </Link>

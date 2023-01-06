@@ -5,6 +5,7 @@ import { ChevronDownIcon } from '@heroicons/react/24/solid';
 
 import Header from '@/components/Header/Header';
 import MobileMenu from '@/components/Header/MobileMenu';
+import classnames from '@/utils/classnames';
 
 type BaseNavItem = {
   label: string;
@@ -113,9 +114,10 @@ const Dropdown = ({ label, items }: DropdownProps) => (
             {({ active }) => (
               <a
                 href={item.url}
-                className={`block rounded-lg px-4 py-2 text-center font-medium ${
-                  active ? 'bg-red-500 text-white' : ''
-                }`}
+                className={classnames(
+                  'block rounded-lg px-4 py-2 text-center font-medium',
+                  active && 'bg-red-500 text-white',
+                )}
               >
                 {item.label}
               </a>

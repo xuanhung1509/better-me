@@ -15,10 +15,11 @@ import {
   startOfWeek,
 } from 'date-fns';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import { EllipsisVerticalIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { Menu, Transition } from '@headlessui/react';
 
 import { Layout } from '@/components';
-import { Menu, Transition } from '@headlessui/react';
-import { EllipsisVerticalIcon, PlusIcon } from '@heroicons/react/24/outline';
+import classnames from '@/utils/classnames';
 
 const meetings = [
   {
@@ -118,9 +119,6 @@ const meetings = [
     endDatetime: '2022-05-20T18:30',
   },
 ];
-
-const classnames = (...classes: Array<string | boolean>) =>
-  classes.filter(Boolean).join(' ');
 
 type MeetingProps = {
   meeting: {

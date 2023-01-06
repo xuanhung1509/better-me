@@ -11,6 +11,7 @@ import {
 import { useCountdown } from '@/hooks';
 import { usePomodoroContext } from '@/contexts/PomodoroContext';
 import { Layout } from '@/components';
+import classnames from '@/utils/classnames';
 import iceCream from '@/assets/images/illustrations/ice-cream.svg';
 import zombieing from '@/assets/images/illustrations/zombieing.svg';
 
@@ -150,9 +151,10 @@ const Countdown = ({
       </svg>
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
         <span
-          className={`select-none text-5xl font-semibold tracking-wider text-gray-900 ${
-            isStarted && !isRunning && !confirmBoxOpen && 'animate-ping'
-          }`}
+          className={classnames(
+            'select-none text-5xl font-semibold tracking-wider text-gray-900',
+            isStarted && !isRunning && !confirmBoxOpen && 'animate-ping',
+          )}
         >
           {zeroPad(minutes)}:{zeroPad(seconds)}
         </span>
