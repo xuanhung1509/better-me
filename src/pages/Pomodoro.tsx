@@ -161,7 +161,7 @@ const Countdown = ({
           <button
             type='button'
             onClick={handleResetClick}
-            className='absolute top-20 left-1/2 -translate-x-1/2 text-sm'
+            className='absolute top-20 left-1/2 w-20 -translate-x-1/2 rounded-3xl px-3 py-2 text-sm transition-colors hover:bg-red-100 hover:text-red-500 active:bg-red-100 active:text-red-500'
           >
             Give up
           </button>
@@ -272,7 +272,7 @@ const Pomodoro = () => {
                     return prev;
                   });
                 }}
-                className='rounded-full bg-lime-500 p-3 text-white disabled:bg-gray-300'
+                className='rounded-full bg-lime-500 p-3 text-white hover:bg-lime-300 active:bg-lime-100 disabled:bg-lime-200'
               >
                 <MinusIcon className='h-6 w-6' />
               </button>
@@ -288,7 +288,7 @@ const Pomodoro = () => {
                     return prev;
                   });
                 }}
-                className='rounded-full bg-lime-500 p-3 text-white disabled:bg-gray-300'
+                className='rounded-full bg-lime-500 p-3 text-white hover:bg-lime-300 active:bg-lime-100 disabled:bg-lime-200'
               >
                 <PlusIcon className='h-6 w-6' />
               </button>
@@ -296,7 +296,7 @@ const Pomodoro = () => {
             <button
               type='button'
               onClick={handleStart}
-              className='mt-2 rounded-2xl bg-red-500 px-12 py-5 text-lg font-bold text-white'
+              className='mt-2 rounded-2xl bg-red-500 px-12 py-5 text-lg font-bold text-white hover:bg-red-300 active:bg-red-100'
             >
               Start
             </button>
@@ -308,7 +308,7 @@ const Pomodoro = () => {
             <button
               type='button'
               onClick={handlePause}
-              className='rounded-2xl bg-lime-500 px-12 py-5 text-white'
+              className='rounded-2xl bg-lime-500 px-12 py-5 text-white hover:bg-lime-300 active:bg-lime-100'
             >
               {isRunning ? 'Pause' : 'Resume'}
             </button>
