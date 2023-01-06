@@ -150,7 +150,7 @@ const Countdown = ({
       </svg>
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
         <span
-          className={`text-5xl font-semibold tracking-wider text-gray-900 ${
+          className={`select-none text-5xl font-semibold tracking-wider text-gray-900 ${
             isStarted && !isRunning && !confirmBoxOpen && 'animate-ping'
           }`}
         >
