@@ -67,14 +67,12 @@ const Alert = ({ isOpen, onClose, isSuccessful }: AlertProps) => (
         <Dialog.Title className='text-2xl font-bold'>
           {isSuccessful ? 'Congratulations!' : 'Oops!'}
         </Dialog.Title>
-        <Dialog.Description className='mt-1'>
-          <p className='text-gray-500'>
-            {isSuccessful ? 'Keep up the good work.' : 'Better luck next time.'}
-          </p>
-          <div className='mt-6'>
-            <img src={isSuccessful ? iceCream : zombieing} alt='' />
-          </div>
+        <Dialog.Description className='mt-1 text-gray-500'>
+          {isSuccessful ? 'Keep up the good work.' : 'Better luck next time.'}
         </Dialog.Description>
+        <div className='mt-6'>
+          <img src={isSuccessful ? iceCream : zombieing} alt='' />
+        </div>
 
         <button
           type='button'
