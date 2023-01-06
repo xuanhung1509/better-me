@@ -33,7 +33,7 @@ const Header = ({ children }: HeaderProps) => {
   return (
     <header
       ref={headerRef}
-      className='sticky top-0 z-10 border-b bg-white transition-transform ease-out'
+      className='sticky top-0 z-10 bg-white transition-transform ease-out'
     >
       {children}
     </header>
