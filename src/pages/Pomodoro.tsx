@@ -258,58 +258,57 @@ const Pomodoro = () => {
         />
 
         {!isStarted && !isCompleted && (
-          <div className='flex items-center gap-4'>
+          <>
+            <div className='mt-6 flex items-center gap-4'>
+              <button
+                type='button'
+                disabled={sessionLength / 60 <= 15}
+                onClick={() => {
+                  setSessionLength((prev) => {
+                    if (prev / 60 > 15) {
+                      return prev - 5 * 60;
+                    }
+
+                    return prev;
+                  });
+                }}
+                className='rounded-full bg-lime-500 p-3 text-white disabled:bg-gray-300'
+              >
+                <MinusIcon className='h-6 w-6' />
+              </button>
+              <button
+                type='button'
+                disabled={sessionLength / 60 >= 120}
+                onClick={() => {
+                  setSessionLength((prev) => {
+                    if (prev / 60 < 120) {
+                      return prev + 5 * 60;
+                    }
+
+                    return prev;
+                  });
+                }}
+                className='rounded-full bg-lime-500 p-3 text-white disabled:bg-gray-300'
+              >
+                <PlusIcon className='h-6 w-6' />
+              </button>
+            </div>
             <button
               type='button'
-              disabled={sessionLength / 60 <= 15}
-              onClick={() => {
-                setSessionLength((prev) => {
-                  if (prev / 60 > 15) {
-                    return prev - 5 * 60;
-                  }
-
-                  return prev;
-                });
-              }}
-              className='rounded-full bg-lime-500 p-3 text-white disabled:bg-gray-300'
+              onClick={handleStart}
+              className='mt-2 rounded-2xl bg-red-500 px-12 py-5 text-lg font-bold text-white'
             >
-              <MinusIcon className='h-6 w-6' />
+              Start
             </button>
-            <button
-              type='button'
-              disabled={sessionLength / 60 >= 120}
-              onClick={() => {
-                setSessionLength((prev) => {
-                  if (prev / 60 < 120) {
-                    return prev + 5 * 60;
-                  }
-
-                  return prev;
-                });
-              }}
-              className='rounded-full bg-lime-500 p-3 text-white disabled:bg-gray-300'
-            >
-              <PlusIcon className='h-6 w-6' />
-            </button>
-          </div>
-        )}
-
-        {!isStarted && !isCompleted && (
-          <button
-            type='button'
-            onClick={handleStart}
-            className='rounded-2xl bg-red-500 py-3 px-8 text-lg font-bold text-white'
-          >
-            Start
-          </button>
+          </>
         )}
 
         {isStarted && !isCompleted && (
-          <div className='flex items-center justify-center gap-4'>
+          <div className='mt-6 flex items-center justify-center gap-4'>
             <button
               type='button'
               onClick={handlePause}
-              className='rounded-2xl bg-lime-500 py-4 px-8 text-white'
+              className='rounded-2xl bg-lime-500 px-12 py-5 text-white'
             >
               {isRunning ? 'Pause' : 'Resume'}
             </button>
