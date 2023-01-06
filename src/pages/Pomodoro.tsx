@@ -14,6 +14,45 @@ import { Layout } from '@/components';
 import iceCream from '@/assets/images/illustrations/ice-cream.svg';
 import zombieing from '@/assets/images/illustrations/zombieing.svg';
 
+type ConfirmBoxProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+};
+
+const ConfirmBox = ({ isOpen, onClose, onConfirm }: ConfirmBoxProps) => (
+  <Dialog open={isOpen} onClose={onClose} className='relative z-50'>
+    <div className='fixed inset-0 bg-slate-500/80' />
+    <div className='fixed inset-0 flex items-center justify-center p-4'>
+      <Dialog.Panel className='w-full max-w-sm rounded-3xl bg-white p-8 shadow'>
+        <Dialog.Title className='text-2xl font-bold'>
+          Are you sure?
+        </Dialog.Title>
+        <Dialog.Description className='mt-1 text-gray-500'>
+          A withered tree will appear in your forest.
+        </Dialog.Description>
+
+        <div className='mt-6 flex items-center justify-end gap-2'>
+          <button
+            type='button'
+            onClick={onClose}
+            className='rounded-2xl border border-red-500 px-8 py-3 text-red-500'
+          >
+            Cancel
+          </button>
+          <button
+            type='button'
+            onClick={onConfirm}
+            className='rounded-2xl bg-red-500 px-8 py-3 text-white'
+          >
+            Give up
+          </button>
+        </div>
+      </Dialog.Panel>
+    </div>
+  </Dialog>
+);
+
 type AlertProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -55,7 +94,8 @@ type CountdownProps = {
   isRunning: boolean;
   isCompleted: boolean;
   timeLeft: number;
-  handleReset: () => void;
+  confirmBoxOpen: boolean;
+  handleResetClick: () => void;
 };
 
 const Countdown = ({
@@ -64,7 +104,8 @@ const Countdown = ({
   isRunning,
   isCompleted,
   timeLeft,
-  handleReset,
+  confirmBoxOpen,
+  handleResetClick,
 }: CountdownProps) => {
   const { showGiveUpButton } = usePomodoroContext();
   const timeElapsed = sessionLength - timeLeft;
@@ -112,7 +153,7 @@ const Countdown = ({
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
         <span
           className={`text-5xl font-semibold tracking-wider text-gray-900 ${
-            isStarted && !isRunning && 'animate-ping'
+            isStarted && !isRunning && !confirmBoxOpen && 'animate-ping'
           }`}
         >
           {zeroPad(minutes)}:{zeroPad(seconds)}
@@ -121,10 +162,10 @@ const Countdown = ({
         {isStarted && !isCompleted && showGiveUpButton && (
           <button
             type='button'
-            onClick={handleReset}
+            onClick={handleResetClick}
             className='absolute top-20 left-1/2 -translate-x-1/2 text-sm'
           >
-            Reset
+            Give up
           </button>
         )}
       </div>
@@ -133,6 +174,7 @@ const Countdown = ({
 };
 
 const Pomodoro = () => {
+  const [confirmBoxOpen, setConfirmBoxOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [success, setSuccess] = useState(0);
   const [isStarted, setIsStarted] = useState(false);
@@ -167,20 +209,13 @@ const Pomodoro = () => {
 
   const isRunningBeforeResetClick = useRef(false);
 
-  const handleReset = () => {
+  const handleResetClick = () => {
     isRunningBeforeResetClick.current = isRunning;
+    setConfirmBoxOpen(true);
 
     if (isRunningBeforeResetClick.current) {
       stopCountdown();
       setIsRunning(false);
-    }
-
-    if (window.confirm('Are you sure?')) {
-      setAlertOpen(true);
-      setIsStarted(false);
-    } else if (isRunningBeforeResetClick.current) {
-      startCountdown();
-      setIsRunning(true);
     }
   };
 
@@ -219,7 +254,8 @@ const Pomodoro = () => {
             isRunning,
             isCompleted,
             timeLeft,
-            handleReset,
+            confirmBoxOpen,
+            handleResetClick,
           }}
         />
 
@@ -282,6 +318,24 @@ const Pomodoro = () => {
           </div>
         )}
       </div>
+
+      {confirmBoxOpen && (
+        <ConfirmBox
+          isOpen={confirmBoxOpen}
+          onClose={() => {
+            setConfirmBoxOpen(false);
+            if (isRunningBeforeResetClick.current) {
+              startCountdown();
+              setIsRunning(true);
+            }
+          }}
+          onConfirm={() => {
+            setConfirmBoxOpen(false);
+            setAlertOpen(true);
+            setIsStarted(false);
+          }}
+        />
+      )}
 
       {alertOpen && (
         <Alert
