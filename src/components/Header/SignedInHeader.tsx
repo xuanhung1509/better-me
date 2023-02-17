@@ -9,11 +9,11 @@ import {
 import Header from '@/components/Header/Header';
 import MobileMenu from '@/components/Header/MobileMenu';
 
-type NavItem = {
+interface NavItem {
   label: string;
   url: string;
   icon: JSX.Element;
-};
+}
 
 const navItems: NavItem[] = [
   {
@@ -43,11 +43,7 @@ const navItems: NavItem[] = [
   },
 ];
 
-type NavMenuProps = {
-  items: NavItem[];
-};
-
-const NavMenu = ({ items }: NavMenuProps) => (
+const NavMenu = ({ items }: { items: NavItem[] }) => (
   <ul className='absolute top-0 right-0 flex h-screen w-full flex-col gap-1 bg-white px-2 pb-8 pt-24'>
     {items.map(({ label, url, icon }) => (
       <li key={label} className='rounded-lg active:bg-red-200'>
@@ -72,4 +68,5 @@ const SignedInHeader = () => (
   </Header>
 );
 
+export type { NavItem };
 export default SignedInHeader;

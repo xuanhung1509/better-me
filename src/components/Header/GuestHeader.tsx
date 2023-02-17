@@ -7,10 +7,10 @@ import Header from '@/components/Header/Header';
 import MobileMenu from '@/components/Header/MobileMenu';
 import classnames from '@/utils/classnames';
 
-type BaseNavItem = {
+interface BaseNavItem {
   label: string;
   url: string;
-};
+}
 
 type NavItem = BaseNavItem & {
   isHashLink?: boolean;
@@ -62,7 +62,7 @@ const LinkWrapper = ({
   label,
   url,
   className,
-  isHashLink,
+  isHashLink = false,
   onClick,
 }: LinkWrapperProps) => {
   if (isHashLink) {
@@ -80,16 +80,10 @@ const LinkWrapper = ({
   );
 };
 
-LinkWrapper.defaultProps = {
-  className: '',
-  isHashLink: false,
-  onClick: () => {},
-};
-
-type DropdownProps = {
+interface DropdownProps {
   label: string;
   items: BaseNavItem[];
-};
+}
 
 const Dropdown = ({ label, items }: DropdownProps) => (
   <Menu>
@@ -129,10 +123,10 @@ const Dropdown = ({ label, items }: DropdownProps) => (
   </Menu>
 );
 
-type NavMenuProps = {
+interface NavMenuProps {
   items: NavItem[];
   onNavItemClick?: () => void;
-};
+}
 
 const NavMenu = ({ items, onNavItemClick }: NavMenuProps) => (
   <ul className='absolute top-0 right-0 flex h-screen w-full flex-col items-stretch gap-1 bg-white px-2 pb-8 pt-24 text-center text-gray-700 md:static md:h-auto md:w-auto md:flex-row md:items-center md:gap-0 md:bg-transparent md:py-0'>
@@ -156,10 +150,6 @@ const NavMenu = ({ items, onNavItemClick }: NavMenuProps) => (
     ))}
   </ul>
 );
-
-NavMenu.defaultProps = {
-  onNavItemClick: () => {},
-};
 
 const GuestHeader = () => {
   const isMD = useMediaQuery('(min-width: 768px)');

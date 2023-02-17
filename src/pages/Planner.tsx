@@ -17,11 +17,18 @@ import {
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import { EllipsisVerticalIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { Menu, Transition } from '@headlessui/react';
-
 import { Layout } from '@/components';
 import classnames from '@/utils/classnames';
 
-const meetings = [
+interface MeetingProps {
+  id: number;
+  name: string;
+  imageUrl: string;
+  startDatetime: string;
+  endDatetime: string;
+}
+
+const meetings: MeetingProps[] = [
   {
     id: 1,
     name: 'Leslie Alexander',
@@ -120,17 +127,7 @@ const meetings = [
   },
 ];
 
-type MeetingProps = {
-  meeting: {
-    id: number;
-    name: string;
-    imageUrl: string;
-    startDatetime: string;
-    endDatetime: string;
-  };
-};
-
-const Meeting = ({ meeting }: MeetingProps) => {
+const Meeting = ({ meeting }: { meeting: MeetingProps }) => {
   const startDateTime = parseISO(meeting.startDatetime);
   const endDateTime = parseISO(meeting.endDatetime);
 

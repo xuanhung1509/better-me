@@ -15,11 +15,11 @@ import classnames from '@/utils/classnames';
 import iceCream from '@/assets/images/illustrations/ice-cream.svg';
 import zombieing from '@/assets/images/illustrations/zombieing.svg';
 
-type ConfirmBoxProps = {
+interface ConfirmBoxProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
-};
+}
 
 const ConfirmBox = ({ isOpen, onClose, onConfirm }: ConfirmBoxProps) => (
   <Dialog open={isOpen} onClose={onClose} className='relative z-50'>
@@ -54,11 +54,11 @@ const ConfirmBox = ({ isOpen, onClose, onConfirm }: ConfirmBoxProps) => (
   </Dialog>
 );
 
-type AlertProps = {
+interface AlertProps {
   isOpen: boolean;
   onClose: () => void;
   isSuccessful: boolean;
-};
+}
 
 const Alert = ({ isOpen, onClose, isSuccessful }: AlertProps) => (
   <Dialog open={isOpen} onClose={onClose} className='relative z-50'>
@@ -87,7 +87,7 @@ const Alert = ({ isOpen, onClose, isSuccessful }: AlertProps) => (
   </Dialog>
 );
 
-type CountdownProps = {
+interface CountdownProps {
   sessionLength: number;
   isStarted: boolean;
   isRunning: boolean;
@@ -95,7 +95,7 @@ type CountdownProps = {
   timeLeft: number;
   confirmBoxOpen: boolean;
   handleResetClick: () => void;
-};
+}
 
 const Countdown = ({
   sessionLength,

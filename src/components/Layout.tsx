@@ -6,15 +6,11 @@ import {
   Cog8ToothIcon,
   Squares2X2Icon,
 } from '@heroicons/react/24/outline';
-
 import SignedInHeader from '@/components/Header/SignedInHeader';
 import Sidebar from '@/components/Sidebar';
+import type { NavItem } from '@/components/Header/SignedInHeader';
 
-const navItems: Array<{
-  label: string;
-  url: string;
-  icon: JSX.Element;
-}> = [
+const navItems: NavItem[] = [
   {
     label: 'Overview',
     url: '/dashboard',
@@ -42,11 +38,7 @@ const navItems: Array<{
   },
 ];
 
-type LayoutProps = {
-  children: React.ReactNode;
-};
-
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ children }: { children: React.ReactNode }) => {
   const isMD = useMediaQuery('(min-width: 768px)');
 
   return (

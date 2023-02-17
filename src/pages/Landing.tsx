@@ -1,11 +1,10 @@
 import { useMediaQuery } from 'usehooks-ts';
 import { UserGroupIcon } from '@heroicons/react/24/solid';
-
 import { GuestHeader } from '@/components';
 import coffee from '@/assets/images/illustrations/coffee.svg';
 import sprinting from '@/assets/images/illustrations/sprinting.gif';
 
-const features = [
+const features: Array<{ title: string; description: string }> = [
   {
     title: 'Học cùng nhau 24/7',
     description:

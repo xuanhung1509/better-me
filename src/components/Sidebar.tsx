@@ -1,15 +1,8 @@
 import { Link } from 'react-router-dom';
 import classnames from '@/utils/classnames';
+import type { NavItem } from '@/components/Header/SignedInHeader';
 
-type SidebarProps = {
-  items: Array<{
-    label: string;
-    url: string;
-    icon: JSX.Element;
-  }>;
-};
-
-const Sidebar = ({ items }: SidebarProps) => (
+const Sidebar = ({ items }: { items: NavItem[] }) => (
   <nav className='fixed top-0 left-0 h-screen w-72 bg-slate-300 p-8 '>
     <Link to='/dashboard'>
       <h1 className='text-2xl font-bold'>BetterMe</h1>

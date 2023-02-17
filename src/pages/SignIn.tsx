@@ -24,10 +24,22 @@ const socialLinks: Array<{
   },
 ];
 
-type FormData = {
+interface FormData {
   email: string;
   password: string;
-};
+}
+
+interface Input {
+  label: string;
+  type: string;
+  id: string;
+  placeholder: string;
+  registerInput: UseFormRegisterReturn;
+  inputErrors: Array<{
+    type: 'required' | 'validate' | string;
+    message: string;
+  }>;
+}
 
 const SignIn = () => {
   const {
@@ -37,17 +49,7 @@ const SignIn = () => {
     reset,
   } = useForm<FormData>();
 
-  const inputs: Array<{
-    label: string;
-    type: string;
-    id: string;
-    placeholder: string;
-    registerInput: UseFormRegisterReturn;
-    inputErrors: Array<{
-      type: 'required' | 'validate' | string;
-      message: string;
-    }>;
-  }> = [
+  const inputs: Input[] = [
     {
       label: 'Your email',
       type: 'email',
