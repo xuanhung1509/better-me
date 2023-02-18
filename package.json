@@ -1,12 +1,11 @@
 {
-  "name": "vite-react-ts-starter",
+  "name": "better-me",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
+    "dev": "next dev -p 5173",
+    "build": "next build",
+    "start": "next start -p 4173",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -15,21 +14,21 @@
     "@heroicons/react": "^2.0.13",
     "date-fns": "^2.29.3",
     "framer-motion": "^8.0.2",
+    "next": "^13.1.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.40.0",
-    "react-router-dom": "^6.4.5",
     "usehooks-ts": "^2.9.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.3.0",
     "@commitlint/config-conventional": "^17.3.0",
+    "@next/font": "^13.1.6",
     "@types/node": "^18.11.13",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.9",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.0.0",
-    "@vitejs/plugin-react-swc": "^3.0.0",
     "autoprefixer": "^10.4.13",
     "eslint": "^8.2.0",
     "eslint-config-airbnb": "19.0.4",
@@ -46,8 +45,7 @@
     "prettier": "^2.8.1",
     "prettier-plugin-tailwindcss": "^0.2.1",
     "tailwindcss": "^3.2.4",
-    "typescript": "^4.9.3",
-    "vite": "^4.0.0"
+    "typescript": "^4.9.3"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

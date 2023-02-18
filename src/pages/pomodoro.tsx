@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLocalStorage } from 'usehooks-ts';
+import Image from 'next/image';
+import { useLocalStorage, useIsClient } from 'usehooks-ts';
 import { Dialog } from '@headlessui/react';
 import {
   MinusIcon,
@@ -9,11 +10,14 @@ import {
 } from '@heroicons/react/24/outline';
 
 import { useCountdown } from '@/hooks';
-import { usePomodoroContext } from '@/contexts/PomodoroContext';
+import {
+  PomodoroProvider,
+  usePomodoroContext,
+} from '@/contexts/PomodoroContext';
 import { Layout } from '@/components';
 import classnames from '@/utils/classnames';
-import iceCream from '@/assets/images/illustrations/ice-cream.svg';
-import zombieing from '@/assets/images/illustrations/zombieing.svg';
+import iceCream from 'public/images/illustrations/ice-cream.svg';
+import zombieing from 'public/images/illustrations/zombieing.svg';
 
 interface ConfirmBoxProps {
   isOpen: boolean;
@@ -72,7 +76,7 @@ const Alert = ({ isOpen, onClose, isSuccessful }: AlertProps) => (
           {isSuccessful ? 'Keep up the good work.' : 'Better luck next time.'}
         </Dialog.Description>
         <div className='mt-6'>
-          <img src={isSuccessful ? iceCream : zombieing} alt='' />
+          <Image src={isSuccessful ? iceCream : zombieing} alt='' />
         </div>
 
         <button
@@ -174,6 +178,7 @@ const Countdown = ({
 };
 
 const Pomodoro = () => {
+  const isClient = useIsClient();
   const [confirmBoxOpen, setConfirmBoxOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [success, setSuccess] = useState(0);
@@ -239,112 +244,117 @@ const Pomodoro = () => {
     resetCountdown();
   };
 
-  return (
-    <Layout>
-      <div className='flex flex-col items-center justify-center gap-4'>
-        <div className='flex w-60 items-center justify-center gap-4 rounded-2xl bg-lime-200 px-8 py-2'>
-          Enter your task
-          <PencilIcon className='h-4 w-4' />
-        </div>
+  if (isClient)
+    return (
+      <Layout>
+        <div className='flex flex-col items-center justify-center gap-4'>
+          <div className='flex w-60 items-center justify-center gap-4 rounded-2xl bg-lime-200 px-8 py-2'>
+            Enter your task
+            <PencilIcon className='h-4 w-4' />
+          </div>
 
-        <Countdown
-          {...{
-            sessionLength,
-            isStarted,
-            isRunning,
-            isCompleted,
-            timeLeft,
-            confirmBoxOpen,
-            handleResetClick,
-          }}
-        />
+          <PomodoroProvider>
+            <Countdown
+              {...{
+                sessionLength,
+                isStarted,
+                isRunning,
+                isCompleted,
+                timeLeft,
+                confirmBoxOpen,
+                handleResetClick,
+              }}
+            />
+          </PomodoroProvider>
 
-        {!isStarted && !isCompleted && (
-          <>
-            <div className='mt-6 flex items-center gap-4'>
+          {!isStarted && !isCompleted && (
+            <>
+              <div className='mt-6 flex items-center gap-4'>
+                <button
+                  type='button'
+                  disabled={sessionLength / 60 <= 15}
+                  onClick={() => {
+                    setSessionLength((prev) => {
+                      if (prev / 60 > 15) {
+                        return prev - 5 * 60;
+                      }
+
+                      return prev;
+                    });
+                  }}
+                  className='rounded-full bg-lime-500 p-3 text-white hover:bg-lime-300 active:bg-lime-100 disabled:bg-lime-200'
+                >
+                  <MinusIcon className='h-6 w-6' />
+                </button>
+                <button
+                  type='button'
+                  disabled={sessionLength / 60 >= 120}
+                  onClick={() => {
+                    setSessionLength((prev) => {
+                      if (prev / 60 < 120) {
+                        return prev + 5 * 60;
+                      }
+
+                      return prev;
+                    });
+                  }}
+                  className='rounded-full bg-lime-500 p-3 text-white hover:bg-lime-300 active:bg-lime-100 disabled:bg-lime-200'
+                >
+                  <PlusIcon className='h-6 w-6' />
+                </button>
+              </div>
               <button
                 type='button'
-                disabled={sessionLength / 60 <= 15}
-                onClick={() => {
-                  setSessionLength((prev) => {
-                    if (prev / 60 > 15) {
-                      return prev - 5 * 60;
-                    }
-
-                    return prev;
-                  });
-                }}
-                className='rounded-full bg-lime-500 p-3 text-white hover:bg-lime-300 active:bg-lime-100 disabled:bg-lime-200'
+                onClick={handleStart}
+                className='mt-2 rounded-2xl bg-red-500 px-12 py-5 text-lg font-bold text-white hover:bg-red-300 active:bg-red-100'
               >
-                <MinusIcon className='h-6 w-6' />
+                Start
               </button>
+            </>
+          )}
+
+          {isStarted && !isCompleted && (
+            <div className='mt-6 flex items-center justify-center gap-4'>
               <button
                 type='button'
-                disabled={sessionLength / 60 >= 120}
-                onClick={() => {
-                  setSessionLength((prev) => {
-                    if (prev / 60 < 120) {
-                      return prev + 5 * 60;
-                    }
-
-                    return prev;
-                  });
-                }}
-                className='rounded-full bg-lime-500 p-3 text-white hover:bg-lime-300 active:bg-lime-100 disabled:bg-lime-200'
+                onClick={handlePause}
+                className='rounded-2xl bg-lime-500 px-12 py-5 text-white hover:bg-lime-300 active:bg-lime-100'
               >
-                <PlusIcon className='h-6 w-6' />
+                {isRunning ? 'Pause' : 'Resume'}
               </button>
             </div>
-            <button
-              type='button'
-              onClick={handleStart}
-              className='mt-2 rounded-2xl bg-red-500 px-12 py-5 text-lg font-bold text-white hover:bg-red-300 active:bg-red-100'
-            >
-              Start
-            </button>
-          </>
+          )}
+        </div>
+
+        {confirmBoxOpen && (
+          <ConfirmBox
+            isOpen={confirmBoxOpen}
+            onClose={() => {
+              setConfirmBoxOpen(false);
+              if (isRunningBeforeResetClick.current) {
+                startCountdown();
+                setIsRunning(true);
+              }
+            }}
+            onConfirm={() => {
+              setConfirmBoxOpen(false);
+              setAlertOpen(true);
+              setIsStarted(false);
+            }}
+          />
         )}
 
-        {isStarted && !isCompleted && (
-          <div className='mt-6 flex items-center justify-center gap-4'>
-            <button
-              type='button'
-              onClick={handlePause}
-              className='rounded-2xl bg-lime-500 px-12 py-5 text-white hover:bg-lime-300 active:bg-lime-100'
-            >
-              {isRunning ? 'Pause' : 'Resume'}
-            </button>
-          </div>
+        {alertOpen && (
+          <Alert
+            isOpen={alertOpen}
+            onClose={handleCloseAlert}
+            isSuccessful={isCompleted}
+          />
         )}
-      </div>
+      </Layout>
+    );
 
-      {confirmBoxOpen && (
-        <ConfirmBox
-          isOpen={confirmBoxOpen}
-          onClose={() => {
-            setConfirmBoxOpen(false);
-            if (isRunningBeforeResetClick.current) {
-              startCountdown();
-              setIsRunning(true);
-            }
-          }}
-          onConfirm={() => {
-            setConfirmBoxOpen(false);
-            setAlertOpen(true);
-            setIsStarted(false);
-          }}
-        />
-      )}
-
-      {alertOpen && (
-        <Alert
-          isOpen={alertOpen}
-          onClose={handleCloseAlert}
-          isSuccessful={isCompleted}
-        />
-      )}
-    </Layout>
-  );
+  return null;
 };
 
 export default Pomodoro;

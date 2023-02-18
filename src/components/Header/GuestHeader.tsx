@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom';
-import { useMediaQuery } from 'usehooks-ts';
+import Link from 'next/link';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 
+import { useMediaQuery } from '@/hooks';
 import Header from '@/components/Header/Header';
 import MobileMenu from '@/components/Header/MobileMenu';
 import classnames from '@/utils/classnames';
@@ -74,7 +74,7 @@ const LinkWrapper = ({
   }
 
   return (
-    <Link to={url} {...{ className, onClick }}>
+    <Link href={url} {...{ className, onClick }}>
       {label}
     </Link>
   );
@@ -158,10 +158,7 @@ const GuestHeader = () => {
     <Header>
       <div className='container'>
         <div className='flex items-center justify-between gap-4 py-3'>
-          <a
-            href='/'
-            className='font-[Merriweather] text-xl font-black md:text-2xl'
-          >
+          <a href='/' className='font-serif text-xl font-black md:text-2xl'>
             BetterMe
           </a>
           {isMD ? (

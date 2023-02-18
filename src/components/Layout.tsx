@@ -1,4 +1,3 @@
-import { useMediaQuery } from 'usehooks-ts';
 import {
   CalendarIcon,
   ChartPieIcon,
@@ -6,6 +5,7 @@ import {
   Cog8ToothIcon,
   Squares2X2Icon,
 } from '@heroicons/react/24/outline';
+import { useMediaQuery } from '@/hooks';
 import SignedInHeader from '@/components/Header/SignedInHeader';
 import Sidebar from '@/components/Sidebar';
 import type { NavItem } from '@/components/Header/SignedInHeader';

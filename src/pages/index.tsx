@@ -1,28 +1,28 @@
-import { useMediaQuery } from 'usehooks-ts';
+import Image from 'next/image';
 import { UserGroupIcon } from '@heroicons/react/24/solid';
+import { useMediaQuery } from '@/hooks';
 import { GuestHeader } from '@/components';
-import coffee from '@/assets/images/illustrations/coffee.svg';
-import sprinting from '@/assets/images/illustrations/sprinting.gif';
-
-const features: Array<{ title: string; description: string }> = [
-  {
-    title: 'Học cùng nhau 24/7',
-    description:
-      'Với hơn 10.000 thành viên tới từ mọi miền đất nước, bạn sẽ không bao giờ phải học một mình.',
-  },
-  {
-    title: 'Gần gũi, lành mạnh',
-    description:
-      'Được tạo nên bởi những con người thân thiện, BetterMe phù hợp với mọi lứa tuổi, màu da, văn hóa - nơi bạn được tự tin là chính mình.',
-  },
-  {
-    title: 'Sát cánh',
-    description:
-      'BetterMe là nơi những người bạn đồng hành chia sẻ, giúp đỡ lẫn nhau trong học tập và muôn vàn những chủ đề khác trong cuộc sống.',
-  },
-];
+import coffee from 'public/images/illustrations/coffee.svg';
+import sprinting from 'public/images/illustrations/sprinting.gif';
 
 const Landing = () => {
+  const features: Array<{ title: string; description: string }> = [
+    {
+      title: 'Học cùng nhau 24/7',
+      description:
+        'Với hơn 10.000 thành viên tới từ mọi miền đất nước, bạn sẽ không bao giờ phải học một mình.',
+    },
+    {
+      title: 'Gần gũi, lành mạnh',
+      description:
+        'Được tạo nên bởi những con người thân thiện, BetterMe phù hợp với mọi lứa tuổi, màu da, văn hóa - nơi bạn được tự tin là chính mình.',
+    },
+    {
+      title: 'Sát cánh',
+      description:
+        'BetterMe là nơi những người bạn đồng hành chia sẻ, giúp đỡ lẫn nhau trong học tập và muôn vàn những chủ đề khác trong cuộc sống.',
+    },
+  ];
   const isMD = useMediaQuery('(min-width: 768px)');
 
   return (
@@ -32,11 +32,11 @@ const Landing = () => {
         <section id='hero' className='py-8'>
           <div className='container'>
             <div className='grid grid-cols-1 items-center gap-4 md:gap-8'>
-              <figure className='mx-auto max-w-sm px-6 md:max-w-md'>
-                <img src={coffee} alt='' />
+              <figure className='ma x-w-sm mx-auto px-6 md:max-w-md'>
+                <Image src={coffee} alt='' />
               </figure>
               <div className='mx-auto flex max-w-2xl flex-col items-center gap-6 text-center md:items-center md:text-center'>
-                <h1 className='font-[Merriweather] text-3xl font-black leading-snug md:text-4xl md:leading-normal'>
+                <h1 className='font-serif text-3xl font-black leading-snug md:text-4xl md:leading-normal'>
                   {isMD ? (
                     'BetterMe bởi Tạ Minh Khôi'
                   ) : (
@@ -88,10 +88,10 @@ const Landing = () => {
           <div className='container'>
             <div className='grid grid-cols-1 items-center gap-4 md:grid-cols-2'>
               <figure className='mx-auto max-w-md p-8 md:max-w-lg'>
-                <img src={sprinting} alt='' />
+                <Image src={sprinting} alt='' />
               </figure>
               <div className=''>
-                <h2 className='text-center font-[Merriweather] text-2xl font-black md:text-left md:text-3xl'>
+                <h2 className='text-center font-serif text-2xl font-black md:text-left md:text-3xl'>
                   Về Better Me
                 </h2>
                 <p className='mt-4 text-center text-lg text-gray-700 md:mt-8 md:text-left'>

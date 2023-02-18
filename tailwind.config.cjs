@@ -1,3 +1,5 @@
+const { fontFamily } = require('tailwindcss/defaultTheme');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -12,6 +14,9 @@ module.exports = {
     extend: {
       screens: {
         '2xl': '1280px',
+      },
+      fontFamily: {
+        serif: ['var(--font-merriweather)', ...fontFamily.serif],
       },
     },
   },
