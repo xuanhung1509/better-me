@@ -2,6 +2,7 @@ import { Fragment, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useForm, UseFormRegisterReturn } from 'react-hook-form';
+import { Meta } from '@/components';
 import googleIcon from 'public/images/icons/google.svg';
 import facebookIcon from 'public/images/icons/facebook.svg';
 import discordIcon from 'public/images/icons/discord.svg';
@@ -146,93 +147,96 @@ const SignUp = () => {
   }, [isSubmitSuccessful, reset]);
 
   return (
-    <section className='py-8'>
-      <div className='container'>
-        <form
-          className='mx-auto mt-4 max-w-md px-4 md:mt-8'
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <h1 className='text-center font-serif text-2xl font-black leading-snug md:text-3xl'>
-            Create an Account
-          </h1>
-          <p className='mt-2 text-center text-gray-500'>
-            Lorem ipsum dolor sit amet consectetur adipisicing
-          </p>
+    <>
+      <Meta title='Tạo tài khoản | Better Me' />
+      <section className='py-8'>
+        <div className='container'>
+          <form
+            className='mx-auto mt-4 max-w-md px-4 md:mt-8'
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <h1 className='text-center font-serif text-2xl font-black leading-snug md:text-3xl'>
+              Create an Account
+            </h1>
+            <p className='mt-2 text-center text-gray-500'>
+              Lorem ipsum dolor sit amet consectetur adipisicing
+            </p>
 
-          <div className='mt-8'>
-            <h2 className='text-center text-lg md:text-xl'>
-              Sign up with Social Media
-            </h2>
-            <div className='mt-4 flex items-center justify-center gap-4'>
-              {socialLinks.map(({ icon, alt }) => (
-                <button
-                  key={alt}
-                  type='button'
-                  className='rounded-2xl border p-3 outline-none transition-shadow hover:border-yellow-500 hover:shadow-lg focus:outline-yellow-500'
-                >
-                  <Image src={icon} alt={alt} className='h-7 w-7' />
-                </button>
-              ))}
+            <div className='mt-8'>
+              <h2 className='text-center text-lg md:text-xl'>
+                Sign up with Social Media
+              </h2>
+              <div className='mt-4 flex items-center justify-center gap-4'>
+                {socialLinks.map(({ icon, alt }) => (
+                  <button
+                    key={alt}
+                    type='button'
+                    className='rounded-2xl border p-3 outline-none transition-shadow hover:border-yellow-500 hover:shadow-lg focus:outline-yellow-500'
+                  >
+                    <Image src={icon} alt={alt} className='h-7 w-7' />
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <div className='mt-8'>
-            {inputs.map(
-              ({
-                label,
-                type,
-                id,
-                placeholder,
-                registerInput,
-                inputErrors,
-              }) => (
-                <Fragment key={id}>
-                  <label htmlFor={id} className='mt-6 block'>
-                    <span className='font-bold'>{label}</span>
-                    <input
-                      type={type}
-                      id={id}
-                      placeholder={placeholder}
-                      className='mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-none focus:outline-yellow-500'
-                      // eslint-disable-next-line react/jsx-props-no-spreading
-                      {...registerInput}
-                    />
-                  </label>
+            <div className='mt-8'>
+              {inputs.map(
+                ({
+                  label,
+                  type,
+                  id,
+                  placeholder,
+                  registerInput,
+                  inputErrors,
+                }) => (
+                  <Fragment key={id}>
+                    <label htmlFor={id} className='mt-6 block'>
+                      <span className='font-bold'>{label}</span>
+                      <input
+                        type={type}
+                        id={id}
+                        placeholder={placeholder}
+                        className='mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-none focus:outline-yellow-500'
+                        // eslint-disable-next-line react/jsx-props-no-spreading
+                        {...registerInput}
+                      />
+                    </label>
 
-                  {inputErrors.map(
-                    (err) =>
-                      errors[id as keyof FormData]?.type === err.type && (
-                        <small
-                          key={`${id} ${err.type}`}
-                          className='mt-2 block text-red-600'
-                        >
-                          {err.message}
-                        </small>
-                      ),
-                  )}
-                </Fragment>
-              ),
-            )}
+                    {inputErrors.map(
+                      (err) =>
+                        errors[id as keyof FormData]?.type === err.type && (
+                          <small
+                            key={`${id} ${err.type}`}
+                            className='mt-2 block text-red-600'
+                          >
+                            {err.message}
+                          </small>
+                        ),
+                    )}
+                  </Fragment>
+                ),
+              )}
 
-            <button
-              type='submit'
-              className='mt-6 w-full rounded-2xl bg-red-500 px-6 py-3 font-bold text-white outline-none hover:bg-red-300 focus:outline-yellow-500 active:bg-red-100'
-            >
-              Sign Up
-            </button>
-          </div>
-          <small className='mt-6 block text-center text-sm'>
-            Already have an account?
-            <Link
-              href='/sign-in'
-              className='ml-1 inline-block text-red-500 outline-none focus:outline-yellow-500'
-            >
-              Sign In
-            </Link>
-          </small>
-        </form>
-      </div>
-    </section>
+              <button
+                type='submit'
+                className='mt-6 w-full rounded-2xl bg-red-500 px-6 py-3 font-bold text-white outline-none hover:bg-red-300 focus:outline-yellow-500 active:bg-red-100'
+              >
+                Sign Up
+              </button>
+            </div>
+            <small className='mt-6 block text-center text-sm'>
+              Already have an account?
+              <Link
+                href='/sign-in'
+                className='ml-1 inline-block text-red-500 outline-none focus:outline-yellow-500'
+              >
+                Sign In
+              </Link>
+            </small>
+          </form>
+        </div>
+      </section>
+    </>
   );
 };
 
